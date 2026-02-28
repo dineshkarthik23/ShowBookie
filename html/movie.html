@@ -9,7 +9,11 @@
 <body>
     <header>
         <a class="logo" href="/movie.html">Show<span>bookie</span></a>
-        <input type="text" placeholder="Search for Movies" />
+                <div class="search-box">
+            <span class="search-icon" aria-hidden="true"></span>
+            <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
+            <div id="search-suggestions" class="search-suggestions hidden"></div>
+        </div>
         <div id="user-info" class="user-menu">
             <span id="username" class="username-label"></span>
             <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
@@ -78,3 +82,5 @@
     <script src="/shell.js"></script>
 </body>
 </html>
+
+

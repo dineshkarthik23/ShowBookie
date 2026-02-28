@@ -38,12 +38,73 @@ header .logo span {
     color: red;
 }
 
-header input {
+.search-box {
     flex: 1;
     margin: 0 16px;
-    padding: 8px;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border: 2px solid #8a8a8a;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.search-icon::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 2px;
+    background: #8a8a8a;
+    right: -6px;
+    bottom: -2px;
+    transform: rotate(45deg);
+    transform-origin: right center;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    z-index: 300;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.search-suggestions.hidden {
+    display: none;
+}
+
+.search-option {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-option:hover {
+    background: #f5f5f5;
 }
 
 header button {
@@ -366,10 +427,31 @@ body.theme-dark .profile-dropdown {
     border-color: #2f2f2f;
 }
 
-body.theme-dark header input {
+body.theme-dark .search-box input {
     background: #262626;
     color: #f1f1f1;
     border-color: #383838;
+}
+
+body.theme-dark .search-icon {
+    border-color: #a8a8a8;
+}
+
+body.theme-dark .search-icon::after {
+    background: #a8a8a8;
+}
+
+body.theme-dark .search-suggestions {
+    background: #1c1c1c;
+    border-color: #2f2f2f;
+}
+
+body.theme-dark .search-option {
+    color: #f1f1f1;
+}
+
+body.theme-dark .search-option:hover {
+    background: #2a2a2a;
 }
 
 body.theme-dark nav a,
@@ -396,7 +478,7 @@ body.theme-dark .profile-dropdown button:hover {
         gap: 12px;
     }
 
-    header input {
+    .search-box {
         order: 3;
         width: 100%;
         margin: 0;
@@ -411,3 +493,5 @@ body.theme-dark .profile-dropdown button:hover {
         font-size: 26px;
     }
 }
+
+
