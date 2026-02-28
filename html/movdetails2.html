@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Booking Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .movie-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .date-selection {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .date-btn {
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+
+    .date-btn.active {
+      background-color: #ff4b4b;
+      color: white;
+    }
+
+    .theater {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+
+    .showtimes {
+      display: flex;
+      gap: 10px;
+    }
+
+    .showtime-btn {
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      background-color: #e0f7fa;
+      cursor: pointer;
+    }
+
+    .showtime-btn.fast-filling {
+      background-color: #ffeb3b;
+    }
+
+    .showtime-btn.full {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="movie-header">
+    <h1>DUNE 2 - English</h1>
+    <span>Action | Sci-Fi</span>
+  </div>
+
+  <div class="date-selection">
+    <button class="date-btn active" type="button"></button>
+    <button class="date-btn" type="button"></button>
+    <button class="date-btn" type="button"></button>
+  </div>
+
+  <div class="theater">
+    <h3>PVR INOX ,Shenoy Nagar</h3>
+    <div class="showtimes">
+      <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=1:00%20PM'">1:00 PM</button>
+      <button class="showtime-btn fast-filling" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=7:00%20PM'">7:00 PM</button>
+      <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=11:00%20PM'">11:00 PM</button>
+    </div>
+  </div>
+
+  <div class="theater">
+    <h3>PVR Grand Mall, Velachery</h3>
+    <div class="showtimes">
+      <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=12:25%20PM'">12:25 PM</button>
+      <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=4:10%20PM'">4:10 PM</button>
+      <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=6:40%20PM'">6:40 PM</button>
+    </div>
+  </div>
+
+  <div class="theater">
+    <h3>PVR Ampa Mall, Adyar</h3>
+    <div class="showtimes">
+      <button class="showtime-btn fast-filling" onclick="window.location.href='seats.html?movie=DUNE%202%20-%20English&time=9:30%20PM'">9:30 PM</button>
+    </div>
+  </div>
+
+  <script>
+    const dateButtons = Array.from(document.querySelectorAll('.date-btn'));
+    const showtimeButtons = Array.from(document.querySelectorAll('.showtime-btn'));
+
+    function toIsoDate(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function toLabel(dateObj) {
+      return dateObj
+        .toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+        .toUpperCase();
+    }
+
+    const baseDate = new Date();
+    let selectedDate = toIsoDate(baseDate);
+
+    dateButtons.forEach((button, index) => {
+      const current = new Date(baseDate);
+      current.setDate(baseDate.getDate() + index);
+      const isoDate = toIsoDate(current);
+
+      button.textContent = toLabel(current);
+      button.dataset.isoDate = isoDate;
+      button.classList.toggle('active', index === 0);
+
+      button.onclick = (event) => {
+        event.preventDefault();
+        selectedDate = isoDate;
+        dateButtons.forEach((btn) => btn.classList.remove('active'));
+        button.classList.add('active');
+      };
+    });
+
+    showtimeButtons.forEach((button) => {
+      const onclickValue = button.getAttribute('onclick') || '';
+      const match = onclickValue.match(/window\.location\.href='([^']+)'/);
+      if (!match) {
+        return;
+      }
+
+      const baseTarget = match[1];
+      button.onclick = (event) => {
+        event.preventDefault();
+        const url = new URL(baseTarget, window.location.href);
+        url.searchParams.set('date', selectedDate);
+        window.location.href = `${url.pathname}${url.search}`;
+      };
+    });
+  </script>
+</body>
+</html>

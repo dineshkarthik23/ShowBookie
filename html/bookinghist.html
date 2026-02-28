@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History | Showbookie</title>
+    <link rel="stylesheet" href="/css/moviestyle.css">
+</head>
+<body>
+    <header>
+        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
+        <input type="text" placeholder="Search for Movies">
+        <div id="user-info" class="user-menu">
+            <span id="username" class="username-label"></span>
+            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
+                <span id="profile-avatar" class="profile-avatar">U</span>
+            </button>
+            <div class="profile-dropdown">
+                <a href="#" data-action="profile-info">Profile info</a>
+                <a href="/html/bookinghist.html">Booking history</a>
+                <button type="button" data-action="theme">Theme: Light</button>
+                <a href="#" data-action="settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="/html/list.html">Movies</a>
+        <a href="/html/bookinghist.html" class="active">Booking History</a>
+        <a href="/html/about.html">About</a>
+        <a href="/html/contact.html">Contact us</a>
+    </nav>
+
+    <main class="main-content">
+        <section class="page-panel">
+            <h1 class="page-title">Booking History</h1>
+            <p class="page-subtitle">Track your latest bookings and quickly book again.</p>
+            <div id="booking-list"></div>
+        </section>
+    </main>
+
+    <div class="stream-banner">
+        <span>Endless Entertainment Anytime, Anywhere!</span>
+    </div>
+
+    <script src="/shell.js"></script>
+    <script src="/booking-history.js"></script>
+</body>
+</html>

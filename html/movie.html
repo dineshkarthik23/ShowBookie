@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/moviestyle.css" />
+    <title>Movie Listings</title>
+</head>
+<body>
+    <header>
+        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
+        <input type="text" placeholder="Search for Movies" />
+        <div id="user-info" class="user-menu">
+            <span id="username" class="username-label"></span>
+            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
+                <span id="profile-avatar" class="profile-avatar">U</span>
+            </button>
+            <div class="profile-dropdown">
+                <a href="#" data-action="profile-info">Profile info</a>
+                <a href="/html/bookinghist.html">Booking history</a>
+                <button type="button" data-action="theme">Theme: Light</button>
+                <a href="#" data-action="settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="/html/list.html">Movies</a>
+        <a href="/html/bookinghist.html">Booking History</a>
+        <a href="/html/about.html">About</a>
+        <a href="/html/contact.html">Contact us</a>
+    </nav>
+
+    <section class="recommended">
+        <h2>Recommended Movies</h2>
+        <div class="movies-container">
+            <div class="movie">
+                <button type="button" onclick="window.location.href='/html/movdetails.html'">
+                    <img src="images/movie1.jpeg" alt="DJANGO">
+                    <div class="rating">⭐ 8.9/10 <span>495 Votes</span></div>
+                    <h3>DJANGO</h3>
+                    <p>Comedy/Drama</p>
+                </button>
+            </div>
+            <div class="movie">
+                <button type="button" onclick="window.location.href='/html/movdetails2.html'">
+                    <img src="images/movie2.jpeg" alt="DUNE 2">
+                    <div class="rating">⭐ 8.3/10 <span>61.1K Votes</span></div>
+                    <h3>DUNE 2</h3>
+                    <p>Drama/Thriller</p>
+                </button>
+            </div>
+            <div class="movie">
+                <button type="button" onclick="window.location.href='/html/movdetails3.html'">
+                    <img src="images/movie3.jpeg" alt="SHAWSHANK REDEMPTION">
+                    <div class="rating">⭐ 7/10 <span>333 Votes</span></div>
+                    <h3>SHAWSHANK REDEMPTION</h3>
+                    <p>Drama</p>
+                </button>
+            </div>
+            <div class="movie">
+                <button type="button" onclick="window.location.href='/html/movdetails4.html'">
+                    <img src="images/movie4.jpeg" alt="INTERSTELLAR">
+                    <div class="rating">⭐ 9/10 <span>3.3K Votes</span></div>
+                    <h3>INTERSTELLAR</h3>
+                    <p>Supernatural/Thriller</p>
+                </button>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stream-banner">
+        <span>Endless Entertainment Anytime, Anywhere!</span>
+    </div>
+
+    <script src="/shell.js"></script>
+</body>
+</html>

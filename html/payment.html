@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment</title>
+    <link rel="stylesheet" href="payment.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #ff4b4b;
+            margin-bottom: 10px;
+        }
+
+        .selected-seats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .seat {
+            padding: 8px 12px;
+            background-color: #e0f7fa;
+            border: 1px solid #66bb6a;
+            border-radius: 4px;
+            color: #388e3c;
+            font-weight: bold;
+        }
+
+        .payment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .payment-details label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .payment-details input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .confirm-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .confirm-button button {
+            padding: 12px 24px;
+            background-color: #ff4b4b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-button button:hover {
+            background-color: #e43a3a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment</h1>
+
+        <div class="section">
+            <h2>Selected Seats</h2>
+            <div class="selected-seats" id="selected-seats">
+    
+            </div>
+        </div>
+        <div class="section">
+            <h2>Payment Details</h2>
+            <div class="payment-details">
+                <label for="card-number">Card Number:</label>
+                <input type="text" id="card-number" placeholder="Enter your card number" required />
+
+                <label for="expiry-date">Expiry Date:</label>
+                <input type="text" id="expiry-date" placeholder="MM/YY" required />
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" placeholder="Enter CVV" required />
+            </div>
+        </div>
+        <div class="confirm-button">
+            <button id="confirm-payment">Confirm Payment</button>
+        </div>
+    </div>
+
+    <script>
+        const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats') || '[]');
+        const selectedSeatsContainer = document.getElementById('selected-seats');
+        const movieTitle = localStorage.getItem('movieTitle') || '';
+        const theater = localStorage.getItem('theater') || '';
+        const showtime = localStorage.getItem('showtime') || '';
+        const date = localStorage.getItem('date') || '';
+
+        if (selectedSeats.length > 0) {
+            selectedSeats.forEach(seat => {
+                const seatElement = document.createElement('div');
+                seatElement.classList.add('seat');
+                seatElement.innerText = seat;
+                selectedSeatsContainer.appendChild(seatElement);
+            });
+        } else {
+            selectedSeatsContainer.innerHTML = '<p>No seats selected.</p>';
+        }
+
+        document.getElementById('confirm-payment').addEventListener('click', async () => {
+            const cardNumber = document.getElementById('card-number').value.trim();
+            const expiryDate = document.getElementById('expiry-date').value.trim();
+            const cvv = document.getElementById('cvv').value.trim();
+
+            if (!cardNumber || !expiryDate || !cvv) {
+                alert('Please fill in all payment details.');
+                return;
+            }
+
+            if (!movieTitle || selectedSeats.length === 0) {
+                alert('Missing booking details. Please reselect seats.');
+                window.location.href = 'seats.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        movieTitle,
+                        theater,
+                        showtime,
+                        date,
+                        selectedSeats,
+                        paymentMode: 'Card'
+                    })
+                });
+
+                if (response.status === 401) {
+                    alert('Please login to continue.');
+                    window.location.href = '/';
+                    return;
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'Booking could not be completed.');
+                }
+
+                const data = await response.json();
+                localStorage.setItem('latestBooking', JSON.stringify(data.booking));
+                alert('Payment successful! Redirecting to booking confirmation...');
+                window.location.href = 'booking.html';
+            } catch (error) {
+                console.error('Payment/booking error:', error);
+                alert(error.message || 'Payment failed. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
