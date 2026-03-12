@@ -34,6 +34,12 @@
     return 'status-confirmed';
   }
 
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = String(text);
+    return div.innerHTML;
+  }
+
   function renderEmptyState() {
     listRoot.innerHTML = '<div class="empty-state">No bookings yet for this account.</div>';
   }
@@ -49,17 +55,17 @@
       return `
         <article class="booking-card">
           <div class="booking-header">
-            <div class="booking-title">Booking #${booking.BookingID}</div>
-            <div class="booking-status ${statusClass(safeStatus)}">${safeStatus}</div>
+            <div class="booking-title">Booking #${escapeHtml(booking.BookingID)}</div>
+            <div class="booking-status ${statusClass(safeStatus)}">${escapeHtml(safeStatus)}</div>
           </div>
           <div class="booking-details">
-            <p><strong>Movie:</strong> ${booking.MovieTitle || 'N/A'}</p>
-            <p><strong>Theater:</strong> ${booking.TheaterName || 'N/A'}</p>
-            <p><strong>Showtime:</strong> ${toDisplayDate(booking.ShowTime)}</p>
-            <p><strong>Booked On:</strong> ${toDisplayDate(booking.BookingDate)}</p>
-            <p><strong>Seats:</strong> ${booking.Seats || 'N/A'}</p>
-            <p><strong>Total Seats:</strong> ${booking.TotalSeats || 0}</p>
-            <p><strong>Total Paid:</strong> ${toCurrency(booking.TotalPrice)}</p>
+            <p><strong>Movie:</strong> ${escapeHtml(booking.MovieTitle || 'N/A')}</p>
+            <p><strong>Theater:</strong> ${escapeHtml(booking.TheaterName || 'N/A')}</p>
+            <p><strong>Showtime:</strong> ${escapeHtml(toDisplayDate(booking.ShowTime))}</p>
+            <p><strong>Booked On:</strong> ${escapeHtml(toDisplayDate(booking.BookingDate))}</p>
+            <p><strong>Seats:</strong> ${escapeHtml(booking.Seats || 'N/A')}</p>
+            <p><strong>Total Seats:</strong> ${escapeHtml(booking.TotalSeats || 0)}</p>
+            <p><strong>Total Paid:</strong> ${escapeHtml(toCurrency(booking.TotalPrice))}</p>
           </div>
         </article>
       `;

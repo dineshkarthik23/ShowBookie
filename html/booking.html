@@ -3,94 +3,42 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Booking Confirmation</title>
-    <link rel="stylesheet" href="/css/booking.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #ff4b4b;
-            margin-bottom: 20px;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .section h2 {
-            color: #ff4b4b;
-            margin-bottom: 10px;
-        }
-
-        .booking-details p {
-            margin: 10px 0;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .booking-details p strong {
-            color: #000;
-        }
-
-        .selected-seats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .seat {
-            padding: 8px 12px;
-            background-color: #e0f7fa;
-            border: 1px solid #66bb6a;
-            border-radius: 4px;
-            color: #388e3c;
-            font-weight: bold;
-        }
-
-        .home-button {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .home-button button {
-            padding: 12px 24px;
-            background-color: #ff4b4b;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .home-button button:hover {
-            background-color: #e43a3a;
-        }
-    </style>
+    <title>Booking Confirmation | Showbookie</title>
+    <link rel="stylesheet" href="/css/moviestyle.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>Booking Successful!!</h1>
+    <header>
+        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
+        <div class="search-box">
+            <span class="search-icon" aria-hidden="true"></span>
+            <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
+            <div id="search-suggestions" class="search-suggestions hidden"></div>
+        </div>
+        <div id="user-info" class="user-menu">
+            <span id="username" class="username-label"></span>
+            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
+                <span id="profile-avatar" class="profile-avatar">U</span>
+            </button>
+            <div class="profile-dropdown">
+                <a href="#" data-action="profile-info">Profile info</a>
+                <a href="/html/bookinghist.html">Booking history</a>
+                <button type="button" data-action="theme">Theme: Light</button>
+                <a href="#" data-action="settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="/html/list.html">Movies</a>
+        <a href="/html/bookinghist.html">Booking History</a>
+        <a href="/html/about.html">About</a>
+        <a href="/html/contact.html">Contact us</a>
+    </nav>
+
+    <main class="main-content">
+      <section class="page-panel booking-success">
+        <h1>Booking Successful!</h1>
 
         <div class="section">
             <h2>Details</h2>
@@ -107,7 +55,14 @@
         <div class="home-button">
             <button onclick="window.location.href='/html/movie.html'">Return to Home</button>
         </div>
+      </section>
+    </main>
+
+    <div class="stream-banner">
+        <span>Endless Entertainment Anytime, Anywhere!</span>
     </div>
+
+    <script src="/shell.js"></script>
 
     <script>
         const latestBooking = JSON.parse(localStorage.getItem('latestBooking') || '{}');
