@@ -44,7 +44,8 @@ const protectedHtmlPaths = new Set([
   '/html/movdetails4.html',
   '/html/seats.html',
   '/html/payment.html',
-  '/html/booking.html'
+  '/html/booking.html',
+  '/html/profile.html'
 ]);
 
 app.use((req, res, next) => {

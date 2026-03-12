@@ -179,10 +179,7 @@
     if (profileInfoAction) {
       profileInfoAction.addEventListener('click', (event) => {
         event.preventDefault();
-        const userName = user.username || 'Unknown';
-        const email = user.email || 'Not available';
-        const userId = user.userId || 'N/A';
-        alert(`Profile\nName: ${userName}\nEmail: ${email}\nUser ID: ${userId}`);
+        window.location.href = '/html/profile.html';
       });
     }
 
