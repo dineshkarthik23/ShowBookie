@@ -3,70 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Movie Booking Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-
-    .movie-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .date-selection {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .date-btn {
-      padding: 10px;
-      border: 1px solid #ccc;
-      background-color: #f9f9f9;
-      cursor: pointer;
-    }
-
-    .date-btn.active {
-      background-color: #ff4b4b;
-      color: white;
-    }
-
-    .theater {
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 10px;
-    }
-
-    .showtimes {
-      display: flex;
-      gap: 10px;
-    }
-
-    .showtime-btn {
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      background-color: #e0f7fa;
-      cursor: pointer;
-    }
-
-    .showtime-btn.fast-filling {
-      background-color: #ffeb3b;
-    }
-
-    .showtime-btn.full {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  </style>
+  <title>SHAWSHANK REDEMPTION | Showbookie</title>
+  <link rel="stylesheet" href="/css/moviestyle.css" />
 </head>
 <body>
-  <div class="movie-header">
-    <h1>SHAWSHANK REDEMPTION</h1>
-    <span>UA13+ | Drama | Thriller</span>
-  </div>
+    <header>
+        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
+        <div class="search-box">
+            <span class="search-icon" aria-hidden="true"></span>
+            <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
+            <div id="search-suggestions" class="search-suggestions hidden"></div>
+        </div>
+        <div id="user-info" class="user-menu">
+            <span id="username" class="username-label"></span>
+            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
+                <span id="profile-avatar" class="profile-avatar">U</span>
+            </button>
+            <div class="profile-dropdown">
+                <a href="#" data-action="profile-info">Profile info</a>
+                <a href="/html/bookinghist.html">Booking history</a>
+                <button type="button" data-action="theme">Theme: Light</button>
+                <a href="#" data-action="settings">Settings</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="/html/list.html" class="active">Movies</a>
+        <a href="/html/bookinghist.html">Booking History</a>
+        <a href="/html/about.html">About</a>
+        <a href="/html/contact.html">Contact us</a>
+    </nav>
+
+    <main class="main-content">
+      <section class="page-panel">
+        <div class="movie-header">
+          <h1>SHAWSHANK REDEMPTION</h1>
+          <span>UA13+ | Drama | Thriller</span>
+        </div>
 
   <div class="date-selection">
     <button class="date-btn active" type="button"></button>
@@ -98,7 +73,14 @@
         <button class="showtime-btn fast-filling" onclick="window.location.href='seats.html?movie=SHAWSHANK%20REDEMPTION&theater=PVR%20Ampa%20Mall%20Adyar&time=9:30%20PM'">9:30 PM</button>
     </div>
 </div>
+      </section>
+    </main>
 
+    <div class="stream-banner">
+        <span>Endless Entertainment Anytime, Anywhere!</span>
+    </div>
+
+    <script src="/shell.js"></script>
   <script>
     const dateButtons = Array.from(document.querySelectorAll('.date-btn'));
     const showtimeButtons = Array.from(document.querySelectorAll('.showtime-btn'));
