@@ -964,4 +964,63 @@ body.theme-dark .profile-dropdown button:hover {
     }
 }
 
+/* Profile page */
+.profile-card {
+    text-align: center;
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 36px 28px;
+}
+
+.profile-avatar-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #e50914;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.profile-details {
+    margin-top: 24px;
+    text-align: left;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.profile-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.profile-value {
+    color: #222;
+}
+
+body.theme-dark .profile-field {
+    border-color: #333;
+}
+
+body.theme-dark .profile-label {
+    color: #aaa;
+}
+
+body.theme-dark .profile-value {
+    color: #eee;
+}
+
+body.theme-dark .profile-avatar-lg {
+    background: #b71c1c;
+}
+
 

@@ -35,6 +35,9 @@
                     <span class="icon"><ion-icon name="lock"></ion-icon></span>
                     <input type="password" name="password" required>
                     <label>Password</label>
+                    <button type="button" class="toggle-password" aria-label="Show password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </button>
                 </div>
                 <div class="remember-forgot">
                     <label><input type="checkbox" name="remember">
@@ -65,6 +68,9 @@
                     <span class="icon"><ion-icon name="lock"></ion-icon></span>
                     <input type="password" name="password" required>
                     <label>Password</label>
+                    <button type="button" class="toggle-password" aria-label="Show password">
+                        <ion-icon name="eye-off"></ion-icon>
+                    </button>
                 </div>
                 <div class="remember-forgot">
                     <label><input type="checkbox" name="terms" required>
@@ -98,6 +104,23 @@
         })();
     </script>
     <script src="../script.js"></script>
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = this.parentElement.querySelector('input[type="password"], input[type="text"]');
+                var icon = this.querySelector('ion-icon');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.setAttribute('name', 'eye');
+                    this.setAttribute('aria-label', 'Hide password');
+                } else {
+                    input.type = 'password';
+                    icon.setAttribute('name', 'eye-off');
+                    this.setAttribute('aria-label', 'Show password');
+                }
+            });
+        });
+    </script>
     <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
 </body>
 </html>

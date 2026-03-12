@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies | Showbookie</title>
+    <title>Profile | Showbookie</title>
     <link rel="stylesheet" href="/css/moviestyle.css">
 </head>
 <body>
     <header>
         <a class="logo" href="/movie.html">Show<span>bookie</span></a>
-                <div class="search-box">
+        <div class="search-box">
             <span class="search-icon" aria-hidden="true"></span>
             <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
             <div id="search-suggestions" class="search-suggestions hidden"></div>
@@ -30,34 +30,25 @@
     </header>
 
     <nav>
-        <a href="/html/list.html" class="active">Movies</a>
+        <a href="/html/list.html">Movies</a>
         <a href="/html/bookinghist.html">Booking History</a>
         <a href="/html/about.html">About</a>
         <a href="/html/contact.html">Contact us</a>
     </nav>
 
     <main class="main-content">
-        <section class="page-panel">
-            <h1 class="page-title">Movies</h1>
-            <p class="page-subtitle">Currently screening titles at Showbookie.</p>
-
-            <div class="page-grid">
-                <article class="movie-link-card">
-                    <a href="/html/movdetails.html">DJANGO</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
-                <article class="movie-link-card">
-                    <a href="/html/movdetails2.html">DUNE 2</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
-                <article class="movie-link-card">
-                    <a href="/html/movdetails3.html">SHAWSHANK REDEMPTION</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
-                <article class="movie-link-card">
-                    <a href="/html/movdetails4.html">INTERSTELLAR</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
+        <section class="page-panel profile-card">
+            <div class="profile-avatar-lg" id="profile-avatar-lg">U</div>
+            <h1 class="page-title" id="profile-name">Loading…</h1>
+            <div class="profile-details">
+                <div class="profile-field">
+                    <span class="profile-label">Email</span>
+                    <span class="profile-value" id="profile-email">—</span>
+                </div>
+                <div class="profile-field">
+                    <span class="profile-label">User ID</span>
+                    <span class="profile-value" id="profile-uid">—</span>
+                </div>
             </div>
         </section>
     </main>
@@ -67,7 +58,23 @@
     </div>
 
     <script src="/shell.js"></script>
+    <script>
+        (async function () {
+            try {
+                const res = await fetch('/get-user');
+                if (!res.ok) return;
+                const user = await res.json();
+                const name = user.username || 'Unknown';
+                const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+
+                document.getElementById('profile-avatar-lg').textContent = initials;
+                document.getElementById('profile-name').textContent = name;
+                document.getElementById('profile-email').textContent = user.email || 'Not available';
+                document.getElementById('profile-uid').textContent = user.userId ?? 'N/A';
+            } catch (e) {
+                console.error('Failed to load profile', e);
+            }
+        })();
+    </script>
 </body>
 </html>
-
-
