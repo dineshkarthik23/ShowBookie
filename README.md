@@ -17,15 +17,13 @@ A modern, web-based movie ticket booking platform with unique cancellation and r
 
 ### Frontend
 - HTML5, CSS3, JavaScript
-- Responsive UI design
 
 ### Backend
 - Node.js with Express.js
 - RESTful API architecture
 
 ### Database
-- MySQL with proper normalization (1NF, 2NF, 3NF, BCNF)
-- ACID compliance for transactions
+- MySQL
 
 ## 📋 Database Schema
 
