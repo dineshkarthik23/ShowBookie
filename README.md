@@ -92,6 +92,13 @@ movie-ticket-booking/
 - **Optimized for Theaters** - Helps reduce revenue loss from cancellations
 - **User-Centric Design** - Focus on seamless user experience
 
+## 📊 ACID Compliance
+
+- **Atomicity** - Complete booking/payment or none
+- **Consistency** - Valid database states maintained
+- **Isolation** - Concurrent transactions handled safely
+- **Durability** - Permanent storage after commit
+
 ## 🔒 Security Features
 
 - Password encryption
@@ -99,10 +106,3 @@ movie-ticket-booking/
 - Data validation
 - Protection against double booking
 - Transaction integrity
-
-## 📊 ACID Compliance
-
-- **Atomicity** - Complete booking/payment or none
-- **Consistency** - Valid database states maintained
-- **Isolation** - Concurrent transactions handled safely
-- **Durability** - Permanent storage after commit
