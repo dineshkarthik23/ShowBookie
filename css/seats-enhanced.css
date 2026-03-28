@@ -1,0 +1,173 @@
+/* ═══════════════════════════════════════════════════════ */
+/* SHOWBOOKIE - ENHANCED SEATS STYLESHEET */
+/* ═══════════════════════════════════════════════════════ */
+
+/* This file is kept for backward compatibility */
+/* The moviestyle.css now contains all necessary styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+body.theme-dark {
+    background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h1 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+body.theme-dark h1 {
+    color: #f5f5f5;
+}
+
+#show-details {
+    color: #666;
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 16px;
+}
+
+body.theme-dark #show-details {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.seat-section {
+    margin-bottom: 32px;
+}
+
+.seat-section h2 {
+    color: #e73c1f;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.seat-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+body.theme-dark .seat-grid {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.row span {
+    width: 24px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+}
+
+body.theme-dark .row span {
+    color: #f5f5f5;
+}
+
+.seats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.seat {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    border: 2px solid #388e3c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.seat:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.seat.selected {
+    background: linear-gradient(135deg, #e73c1f, #ff5c3d);
+    border-color: #c92a0f;
+    box-shadow: 0 4px 15px rgba(231, 60, 31, 0.4);
+}
+
+.seat.sold {
+    background: linear-gradient(135deg, #ef9a9a, #e57373);
+    border-color: #d32f2f;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.status {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+}
+
+body.theme-dark .status {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.status > span {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    border-radius: 4px;
+    border: 2px solid #ccc;
+}
+
+.status .available {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    border: none;
+}
+
+.status .selected {
+    background: linear-gradient(135deg, #e73c1f, #ff5c3d);
+    border: none;
+}
+
+.status .sold {
+    background: linear-gradient(135deg, #ef9a9a, #e57373);
+    border: none;
+}
