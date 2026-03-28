@@ -17,15 +17,13 @@ A modern, web-based movie ticket booking platform with unique cancellation and r
 
 ### Frontend
 - HTML5, CSS3, JavaScript
-- Responsive UI design
 
 ### Backend
 - Node.js with Express.js
 - RESTful API architecture
 
 ### Database
-- MySQL with proper normalization (1NF, 2NF, 3NF, BCNF)
-- ACID compliance for transactions
+- MySQL
 
 ## 📋 Database Schema
 
@@ -94,6 +92,13 @@ movie-ticket-booking/
 - **Optimized for Theaters** - Helps reduce revenue loss from cancellations
 - **User-Centric Design** - Focus on seamless user experience
 
+## 📊 ACID Compliance
+
+- **Atomicity** - Complete booking/payment or none
+- **Consistency** - Valid database states maintained
+- **Isolation** - Concurrent transactions handled safely
+- **Durability** - Permanent storage after commit
+
 ## 🔒 Security Features
 
 - Password encryption
@@ -101,10 +106,3 @@ movie-ticket-booking/
 - Data validation
 - Protection against double booking
 - Transaction integrity
-
-## 📊 ACID Compliance
-
-- **Atomicity** - Complete booking/payment or none
-- **Consistency** - Valid database states maintained
-- **Isolation** - Concurrent transactions handled safely
-- **Durability** - Permanent storage after commit
