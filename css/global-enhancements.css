@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════ */
-/* SHOWBOOKIE - GLOBAL ENHANCEMENTS CSS */
-/* ═══════════════════════════════════════════════════════ */
-/* Include this file in all HTML pages for consistent UI */
-
 :root {
     --primary-color: #e73c1f;
     --primary-dark: #c92a0f;
@@ -21,12 +16,10 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/*** SMOOTH SCROLL BEHAVIOR ***/
 html {
     scroll-behavior: smooth;
 }
 
-/*** SELECTION STYLING ***/
 ::selection {
     background-color: rgba(231, 60, 31, 0.3);
     color: var(--text-dark);
@@ -36,8 +29,6 @@ body.theme-dark ::selection {
     background-color: rgba(231, 60, 31, 0.5);
     color: var(--text-light);
 }
-
-/*** SCROLLBAR CUSTOMIZATION ***/
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -59,8 +50,6 @@ body.theme-dark ::-webkit-scrollbar-track {
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, var(--primary-light), var(--primary-color));
 }
-
-/*** ANIMATIONS ***/
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -134,7 +123,6 @@ body.theme-dark ::-webkit-scrollbar-track {
     }
 }
 
-/*** BUTTON ENHANCEMENTS ***/
 button,
 a.btn,
 input[type="submit"],
@@ -160,7 +148,6 @@ input[type="button"]:active:not(:disabled) {
     transform: translateY(0);
 }
 
-/*** INPUT FIELD ENHANCEMENTS ***/
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -185,7 +172,6 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(231, 60, 31, 0.1);
 }
 
-/*** LINK ENHANCEMENTS ***/
 a {
     color: var(--primary-color);
     text-decoration: none;
@@ -196,21 +182,16 @@ a:hover {
     color: var(--primary-light);
     text-decoration: underline;
 }
-
-/*** TEXT SELECTION ***/
 p, span, div, h1, h2, h3, h4, h5, h6 {
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
-
-/*** RESPONSIVE IMAGES ***/
 img {
     max-width: 100%;
     height: auto;
     display: block;
 }
 
-/*** UTILITY CLASSES ***/
 
 .hidden {
     display: none !important;
@@ -259,14 +240,11 @@ img {
 .shadow-lg {
     box-shadow: var(--shadow-large);
 }
-
-/*** FOCUS VISIBLE FOR ACCESSIBILITY ***/
 *:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
-/*** NO-ANIMATION MODE FOR ACCESSIBILITY ***/
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
@@ -275,8 +253,6 @@ img {
         scroll-behavior: auto !important;
     }
 }
-
-/*** DARK MODE ENHANCEMENTS ***/
 @media (prefers-color-scheme: dark) {
     body:not(.theme-dark) {
         background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%);
@@ -293,8 +269,6 @@ img {
         border-color: rgba(255, 107, 91, 0.3);
     }
 }
-
-/*** PRINT STYLES ***/
 @media print {
     header,
     nav,
@@ -311,8 +285,6 @@ img {
         text-decoration: underline;
     }
 }
-
-/*** LANDSCAPE MODE ADJUSTMENTS ***/
 @media (max-height: 600px) and (orientation: landscape) {
     header {
         padding: 8px 16px;
