@@ -1,8 +1,4 @@
-/* ------------------------------------------------------- */
-/* SHOWBOOKIE - MODERN UI STYLESHEET */
-/* ------------------------------------------------------- */
 
-/* General Styling */
 * {
     margin: 0;
     padding: 0;
@@ -43,9 +39,6 @@ body.theme-dark ::selection {
     background-color: rgba(231, 60, 31, 0.3);
     color: var(--text-light);
 }
-/* ─────────────────────────────────────────────────────── */
-/* HEADER STYLES */
-/* ─────────────────────────────────────────────────────── */
 
 header {
     display: flex;
@@ -304,10 +297,6 @@ body.theme-dark .profile-dropdown button {
     color: var(--primary-color);
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* NAVIGATION STYLES */
-/* ─────────────────────────────────────────────────────── */
-
 nav {
     display: flex;
     justify-content: center;
@@ -363,10 +352,6 @@ nav a:hover::after {
     transform: scaleX(1);
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* MAIN CONTENT */
-/* ─────────────────────────────────────────────────────── */
-
 .main-content {
     padding: 40px 32px;
     max-width: 1400px;
@@ -413,10 +398,6 @@ body.theme-dark .page-title {
     font-size: 16px;
     line-height: 1.5;
 }
-
-/* ─────────────────────────────────────────────────────── */
-/* RECOMMENDED MOVIES SECTION */
-/* ─────────────────────────────────────────────────────── */
 
 .recommended {
     padding: 40px 32px;
@@ -539,10 +520,6 @@ body.theme-dark .movie h3 {
     border: 1px solid rgba(231, 60, 31, 0.2);
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* STREAM BANNER */
-/* ─────────────────────────────────────────────────────── */
-
 .stream-banner {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     color: #fff;
@@ -566,10 +543,6 @@ body.theme-dark .movie h3 {
         transform: translateY(0);
     }
 }
-
-/* ─────────────────────────────────────────────────────── */
-/* BOOKING CARDS */
-/* ─────────────────────────────────────────────────────── */
 
 .booking-card {
     background: var(--bg-panel);
@@ -653,10 +626,6 @@ body.theme-dark .booking-details strong {
     color: var(--text-light);
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* BUTTONS */
-/* ─────────────────────────────────────────────────────── */
-
 .button-group {
     display: flex;
     gap: 12px;
@@ -715,10 +684,6 @@ body.theme-dark .booking-details strong {
     opacity: 0.6;
     cursor: not-allowed;
 }
-
-/* ─────────────────────────────────────────────────────── */
-/* SEATS SECTION */
-/* ─────────────────────────────────────────────────────── */
 
 .seats-panel {
     max-width: 900px;
@@ -854,10 +819,6 @@ body.theme-dark .status {
     background: linear-gradient(135deg, #ef9a9a, #e57373);
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* PAYMENT SECTION */
-/* ─────────────────────────────────────────────────────── */
-
 .payment-section {
     margin-bottom: 24px;
 }
@@ -950,14 +911,70 @@ body.theme-dark .selected-seats {
     text-align: center;
 }
 
+.home-button button,
+.home-button a {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: #fff;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 60, 31, 0.3);
+}
+
+.home-button button:hover,
+.home-button a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 60, 31, 0.5);
+}
+
+.home-button button:active,
+.home-button a:active {
+    transform: translateY(0);
+}
+
 .confirm-button {
     margin-top: 28px;
     text-align: center;
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* DATE & THEATER SELECTION */
-/* ─────────────────────────────────────────────────────── */
+#proceed-button,
+#confirm-payment {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: #fff;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 60, 31, 0.3);
+    min-width: 200px;
+}
+
+#proceed-button:hover:not(:disabled),
+#confirm-payment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 60, 31, 0.5);
+}
+
+#proceed-button:active:not(:disabled),
+#confirm-payment:active {
+    transform: translateY(0);
+}
+
+#proceed-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #ccc, #999);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
 .date-selection {
     display: flex;
@@ -1073,10 +1090,6 @@ body.theme-dark .showtime-btn.fast-filling {
     opacity: 0.5;
 }
 
-/* ─────────────────────────────────────────────────────── */
-/* ANIMATIONS */
-/* ─────────────────────────────────────────────────────── */
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -1108,11 +1121,6 @@ header {
 nav {
     animation: slideInDown 0.5s ease;
 }
-
-/* ─────────────────────────────────────────────────────── */
-/* UTILITIES */
-/* ─────────────────────────────────────────────────────── */
-
 .content-list {
     list-style: none;
     padding-left: 0;
@@ -1160,10 +1168,6 @@ body.theme-dark .content-list li {
 body.theme-dark .section h2 {
     color: var(--text-light);
 }
-
-/* ─────────────────────────────────────────────────────── */
-/* RESPONSIVE DESIGN */
-/* ─────────────────────────────────────────────────────── */
 
 @media (max-width: 1024px) {
     header {
@@ -1272,6 +1276,17 @@ body.theme-dark .section h2 {
     .btn-danger {
         width: 100%;
         justify-content: center;
+    }
+
+    #proceed-button,
+    #confirm-payment {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .home-button,
+    .confirm-button {
+        margin-top: 20px;
     }
 
     .seat-grid {
@@ -1426,5 +1441,18 @@ body.theme-dark .section h2 {
     .showtime-btn {
         padding: 8px 12px;
         font-size: 12px;
+    }
+
+    #proceed-button,
+    #confirm-payment {
+        width: 100%;
+        min-width: auto;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .home-button,
+    .confirm-button {
+        margin-top: 20px;
     }
 }

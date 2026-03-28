@@ -10,14 +10,9 @@
 </head>
 <body>
     <header>
-        <a class="logo" href="/">Show<span>bookie</span></a>
-        <nav class="navigation">
-            <a href="/">Home</a>
-            <a href="/html/about.html">About</a>
-            <a href="/html/about.html">Services</a>
-            <a href="/html/contact.html">Contact</a>
-            <button class="btnloginPopup">Login</button>
-        </nav>
+        <div class="logo-container">
+            <a class="logo" href="/">Show<span>bookie</span> <span class="separator">-</span> <span class="tagline">book show tickets seamlessly!</span></a>
+        </div>
     </header>
 
     <div class="wrapper">
@@ -28,12 +23,12 @@
             <form action="/login" method="POST">
                 <div class="input-box">
                     <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" placeholder=" " required>
                     <label>Email</label>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock"></ion-icon></span>
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" placeholder=" " required>
                     <label>Password</label>
                     <button type="button" class="toggle-password" aria-label="Show password">
                         <ion-icon name="eye-off"></ion-icon>
@@ -56,17 +51,17 @@
             <form action="/register" method="POST">
                 <div class="input-box">
                     <span class="icon"><ion-icon name="person"></ion-icon></span>
-                    <input type="text" name="username" required>
+                    <input type="text" name="username" placeholder=" " required>
                     <label>Username</label>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" placeholder=" " required>
                     <label>Email</label>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock"></ion-icon></span>
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" placeholder=" " required>
                     <label>Password</label>
                     <button type="button" class="toggle-password" aria-label="Show password">
                         <ion-icon name="eye-off"></ion-icon>

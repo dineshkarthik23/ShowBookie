@@ -4,20 +4,32 @@ const registerLink = document.querySelector('.register-link');
 const btnLoginPopup = document.querySelector('.btnloginPopup');
 const iconClose = document.querySelector('.icon-close');
 
-btnLoginPopup.addEventListener('click', () => {
-    wrapper.classList.add('active-popup');
-});
+// Only add event listener if btnLoginPopup exists
+if (btnLoginPopup) {
+    btnLoginPopup.addEventListener('click', () => {
+        wrapper.classList.add('active-popup');
+    });
+}
 
-iconClose.addEventListener('click', () => {
-    wrapper.classList.remove('active-popup');
-});
+// Only add event listener if iconClose exists
+if (iconClose) {
+    iconClose.addEventListener('click', () => {
+        wrapper.classList.remove('active-popup');
+    });
+}
 
-registerLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    wrapper.classList.add('active');
-});
+// Register link to show register form
+if (registerLink) {
+    registerLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        wrapper.classList.add('active');
+    });
+}
 
-loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    wrapper.classList.remove('active');
-});
+// Login link to show login form
+if (loginLink) {
+    loginLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        wrapper.classList.remove('active');
+    });
+}
