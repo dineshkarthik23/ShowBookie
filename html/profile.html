@@ -37,17 +37,96 @@
     </nav>
 
     <main class="main-content">
-        <section class="page-panel profile-card">
-            <div class="profile-avatar-lg" id="profile-avatar-lg">U</div>
-            <h1 class="page-title" id="profile-name">Loading…</h1>
-            <div class="profile-details">
-                <div class="profile-field">
-                    <span class="profile-label">Email</span>
-                    <span class="profile-value" id="profile-email">—</span>
+        <section class="profile-section">
+            <div class="profile-header">
+                <div class="profile-banner"></div>
+                <div class="profile-card-main">
+                    <div class="profile-avatar-lg" id="profile-avatar-lg">U</div>
+                    <div class="profile-header-info">
+                        <h1 class="profile-name" id="profile-name">Loading…</h1>
+                        <p class="profile-status" id="profile-status">Active Member</p>
+                    </div>
                 </div>
-                <div class="profile-field">
-                    <span class="profile-label">User ID</span>
-                    <span class="profile-value" id="profile-uid">—</span>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-details-grid">
+                    <div class="profile-card">
+                        <h3 class="card-title">Personal Information</h3>
+                        <div class="detail-group">
+                            <div class="detail-item">
+                                <label class="detail-label">Full Name</label>
+                                <p class="detail-value" id="profile-fullname">—</p>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Email Address</label>
+                                <p class="detail-value" id="profile-email">—</p>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Phone Number</label>
+                                <p class="detail-value" id="profile-phone">Not provided</p>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Date of Birth</label>
+                                <p class="detail-value" id="profile-dob">Not provided</p>
+                            </div>
+                        </div>
+                        <button class="btn-edit" id="edit-profile-btn">Edit Profile</button>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3 class="card-title">Account Information</h3>
+                        <div class="detail-group">
+                            <div class="detail-item">
+                                <label class="detail-label">User ID</label>
+                                <p class="detail-value" id="profile-uid">—</p>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Member Since</label>
+                                <p class="detail-value" id="profile-joindate">—</p>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Account Status</label>
+                                <p class="detail-value status-active">Active</p>
+                            </div>
+                            <div class="detail-item">
+                                <label class="detail-label">Last Login</label>
+                                <p class="detail-value" id="profile-lastlogin">Today</p>
+                            </div>
+                        </div>
+                        <button class="btn-secondary" id="change-password-btn">Change Password</button>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎬</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Bookings</p>
+                            <p class="stat-value" id="total-bookings">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Favorite Genre</p>
+                            <p class="stat-value" id="favorite-genre">Not rated</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎫</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Current Reservations</p>
+                            <p class="stat-value" id="current-res">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Spent</p>
+                            <p class="stat-value" id="total-spent">$0</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -69,8 +148,21 @@
 
                 document.getElementById('profile-avatar-lg').textContent = initials;
                 document.getElementById('profile-name').textContent = name;
-                document.getElementById('profile-email').textContent = user.email || 'Not available';
-                document.getElementById('profile-uid').textContent = user.userId ?? 'N/A';
+                
+                document.getElementById('profile-fullname').textContent = user.username || '—';
+                document.getElementById('profile-email').textContent = user.email || '—';
+                document.getElementById('profile-phone').textContent = user.phone || 'Not provided';
+                document.getElementById('profile-dob').textContent = user.dateOfBirth || 'Not provided';
+                
+                document.getElementById('profile-uid').textContent = user.userId || '—';
+                document.getElementById('profile-joindate').textContent = user.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : '—';
+                document.getElementById('profile-lastlogin').textContent = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Today';
+                
+                document.getElementById('total-bookings').textContent = user.totalBookings || '0';
+                document.getElementById('favorite-genre').textContent = user.favoriteGenre || 'Not rated';
+                document.getElementById('current-res').textContent = user.currentReservations || '0';
+                document.getElementById('total-spent').textContent = user.totalSpent ? '$' + user.totalSpent : '$0';
+                
             } catch (e) {
                 console.error('Failed to load profile', e);
             }
