@@ -488,6 +488,7 @@ body.theme-dark .movie {
 
 .movie-info {
     padding: 16px;
+    text-align: center;
 }
 
 .movie h3 {
@@ -495,6 +496,7 @@ body.theme-dark .movie {
     font-weight: 700;
     margin: 8px 0 4px;
     color: var(--text-dark);
+    text-align: center;
 }
 
 body.theme-dark .movie h3 {
@@ -505,6 +507,7 @@ body.theme-dark .movie h3 {
     font-size: 13px;
     color: var(--text-medium);
     margin-bottom: 12px;
+    text-align: center;
 }
 
 .rating {
@@ -514,8 +517,9 @@ body.theme-dark .movie h3 {
     font-size: 12px;
     border-radius: 6px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 8px;
     font-weight: 600;
     border: 1px solid rgba(231, 60, 31, 0.2);
 }
@@ -979,6 +983,7 @@ body.theme-dark .selected-seats {
 .date-selection {
     display: flex;
     gap: 12px;
+    margin-top: 32px;
     margin-bottom: 24px;
     flex-wrap: wrap;
 }
@@ -1690,6 +1695,7 @@ body.theme-dark .btn-secondary:hover {
 
     .date-selection {
         gap: 8px;
+        margin-top: 24px;
     }
 
     .date-btn {

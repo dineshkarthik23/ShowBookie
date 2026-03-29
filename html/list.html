@@ -37,27 +37,42 @@
     </nav>
 
     <main class="main-content">
-        <section class="page-panel">
-            <h1 class="page-title">Movies</h1>
+        <section class="recommended">
+            <h2>All Movies</h2>
             <p class="page-subtitle">Currently screening titles at Showbookie.</p>
-
-            <div class="page-grid">
-                <article class="movie-link-card">
-                    <a href="/html/movdetails.html">DJANGO</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
-                <article class="movie-link-card">
-                    <a href="/html/movdetails2.html">DUNE 2</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
-                <article class="movie-link-card">
-                    <a href="/html/movdetails3.html">SHAWSHANK REDEMPTION</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
-                <article class="movie-link-card">
-                    <a href="/html/movdetails4.html">INTERSTELLAR</a>
-                    <p class="movie-meta">Language: English</p>
-                </article>
+            <div class="movies-container">
+                <div class="movie">
+                    <button type="button" onclick="window.location.href='/html/movdetails.html'">
+                        <img src="/images/movie1.jpeg" alt="DJANGO">
+                        <div class="rating">⭐ 8.9/10 <span>495 Votes</span></div>
+                        <h3>DJANGO</h3>
+                        <p>Comedy/Drama</p>
+                    </button>
+                </div>
+                <div class="movie">
+                    <button type="button" onclick="window.location.href='/html/movdetails2.html'">
+                        <img src="/images/movie2.jpeg" alt="DUNE 2">
+                        <div class="rating">⭐ 8.3/10 <span>61.1K Votes</span></div>
+                        <h3>DUNE 2</h3>
+                        <p>Drama/Thriller</p>
+                    </button>
+                </div>
+                <div class="movie">
+                    <button type="button" onclick="window.location.href='/html/movdetails3.html'">
+                        <img src="/images/movie3.jpeg" alt="SHAWSHANK REDEMPTION">
+                        <div class="rating">⭐ 7/10 <span>333 Votes</span></div>
+                        <h3>SHAWSHANK REDEMPTION</h3>
+                        <p>Drama</p>
+                    </button>
+                </div>
+                <div class="movie">
+                    <button type="button" onclick="window.location.href='/html/movdetails4.html'">
+                        <img src="/images/movie4.jpeg" alt="INTERSTELLAR">
+                        <div class="rating">⭐ 9/10 <span>3.3K Votes</span></div>
+                        <h3>INTERSTELLAR</h3>
+                        <p>Supernatural/Thriller</p>
+                    </button>
+                </div>
             </div>
         </section>
     </main>
