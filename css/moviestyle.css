@@ -1284,6 +1284,10 @@ body.theme-dark .profile-status {
     display: contents;
 }
 
+.profile-details-grid ~ .profile-card {
+    grid-column: 1 / -1;
+}
+
 .profile-card {
     background: var(--bg-panel);
     border-radius: 12px;
@@ -1404,63 +1408,6 @@ body.theme-dark .btn-secondary {
 
 body.theme-dark .btn-secondary:hover {
     background: #3a3a4e;
-}
-
-.profile-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-}
-
-.stat-card {
-    background: var(--bg-panel);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: var(--shadow-medium);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: all 0.3s ease;
-}
-
-body.theme-dark .stat-card {
-    background: #1a1a2e;
-    border: 1px solid rgba(255, 107, 91, 0.2);
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-large);
-}
-
-.stat-icon {
-    font-size: 32px;
-    min-width: 40px;
-    text-align: center;
-}
-
-.stat-content {
-    flex: 1;
-}
-
-.stat-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0 0 4px 0;
-}
-
-body.theme-dark .stat-label {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.stat-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin: 0;
 }
 
 @media (max-width: 1024px) {
@@ -1604,10 +1551,6 @@ body.theme-dark .stat-label {
     /* Profile Responsive */
     .profile-content {
         grid-template-columns: 1fr;
-    }
-
-    .profile-stats {
-        grid-template-columns: repeat(2, 1fr);
     }
 
     .profile-card-main {
@@ -1781,15 +1724,6 @@ body.theme-dark .stat-label {
     }
 
     /* Mobile Profile */
-    .profile-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .stat-card {
-        display: flex;
-        align-items: flex-start;
-    }
-
     .card-title {
         font-size: 16px;
     }

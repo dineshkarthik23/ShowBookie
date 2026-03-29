@@ -98,33 +98,24 @@
                     </div>
                 </div>
 
-                <div class="profile-stats">
-                    <div class="stat-card">
-                        <div class="stat-icon">🎬</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Total Bookings</p>
-                            <p class="stat-value" id="total-bookings">0</p>
+                <div class="profile-card">
+                    <h3 class="card-title">Account Analysis</h3>
+                    <div class="detail-group">
+                        <div class="detail-item">
+                            <label class="detail-label">Total Bookings</label>
+                            <p class="detail-value" id="total-bookings">0</p>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">⭐</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Favorite Genre</p>
-                            <p class="stat-value" id="favorite-genre">Not rated</p>
+                        <div class="detail-item">
+                            <label class="detail-label">Favorite Genre</label>
+                            <p class="detail-value" id="favorite-genre">Not rated</p>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🎫</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Current Reservations</p>
-                            <p class="stat-value" id="current-res">0</p>
+                        <div class="detail-item">
+                            <label class="detail-label">Current Reservations</label>
+                            <p class="detail-value" id="current-res">0</p>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">💰</div>
-                        <div class="stat-content">
-                            <p class="stat-label">Total Spent</p>
-                            <p class="stat-value" id="total-spent">$0</p>
+                        <div class="detail-item">
+                            <label class="detail-label">Total Spent</label>
+                            <p class="detail-value" id="total-spent">Rs. 0</p>
                         </div>
                     </div>
                 </div>
@@ -140,9 +131,10 @@
     <script>
         (async function () {
             try {
-                const res = await fetch('/get-user');
-                if (!res.ok) return;
-                const user = await res.json();
+                // Fetch user profile data
+                const userRes = await fetch('/get-user');
+                if (!userRes.ok) return;
+                const user = await userRes.json();
                 const name = user.username || 'Unknown';
                 const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
@@ -158,10 +150,52 @@
                 document.getElementById('profile-joindate').textContent = user.joinedDate ? new Date(user.joinedDate).toLocaleDateString() : '—';
                 document.getElementById('profile-lastlogin').textContent = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Today';
                 
-                document.getElementById('total-bookings').textContent = user.totalBookings || '0';
-                document.getElementById('favorite-genre').textContent = user.favoriteGenre || 'Not rated';
-                document.getElementById('current-res').textContent = user.currentReservations || '0';
-                document.getElementById('total-spent').textContent = user.totalSpent ? '$' + user.totalSpent : '$0';
+                // Fetch booking history data
+                const bookingsRes = await fetch('/api/bookings');
+                if (bookingsRes.ok) {
+                    const data = await bookingsRes.json();
+                    const bookings = data.bookings || [];
+                    
+                    // Calculate statistics from bookings
+                    let totalSpent = 0;
+                    let currentReservations = 0;
+                    const genres = {};
+                    
+                    bookings.forEach(booking => {
+                        // Calculate total spent
+                        totalSpent += parseFloat(booking.TotalPrice || 0);
+                        
+                        // Count current reservations (future bookings)
+                        const showTime = new Date(booking.ShowTime);
+                        if (showTime > new Date() && booking.PaymentStatus !== 'Cancelled' && booking.PaymentStatus !== 'Refunded') {
+                            currentReservations++;
+                        }
+                        
+                        // Track genres for favorite genre
+                        const genre = booking.Genre || 'Unknown';
+                        genres[genre] = (genres[genre] || 0) + 1;
+                    });
+                    
+                    // Find favorite genre (most booked)
+                    let favoriteGenre = 'Not rated';
+                    if (Object.keys(genres).length > 0) {
+                        favoriteGenre = Object.keys(genres).reduce((a, b) => 
+                            genres[a] > genres[b] ? a : b
+                        );
+                    }
+                    
+                    // Update the profile page with calculated stats
+                    document.getElementById('total-bookings').textContent = bookings.length;
+                    document.getElementById('favorite-genre').textContent = favoriteGenre;
+                    document.getElementById('current-res').textContent = currentReservations;
+                    document.getElementById('total-spent').textContent = 'Rs. ' + totalSpent.toFixed(2);
+                } else {
+                    // Fallback to user data if API fails
+                    document.getElementById('total-bookings').textContent = user.totalBookings || '0';
+                    document.getElementById('favorite-genre').textContent = user.favoriteGenre || 'Not rated';
+                    document.getElementById('current-res').textContent = user.currentReservations || '0';
+                    document.getElementById('total-spent').textContent = user.totalSpent ? 'Rs. ' + user.totalSpent : 'Rs. 0';
+                }
                 
             } catch (e) {
                 console.error('Failed to load profile', e);
