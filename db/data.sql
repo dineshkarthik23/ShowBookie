@@ -92,18 +92,20 @@ VALUES
 (103, 'Shawshank Redemption', 'Supernatural','Thriller', 142, '1994-10-14', 'English', 9.3),
 (104, 'Interstellar', 'Sci-fi','Adventure', 170, '2014-11-1', 'English', 8.7);
 
+-- NOTE: Test user data. Passwords are placeholders and must be hashed locally before production use.
+-- See db/README.md for instructions on setting up passwords with proper hashing.
 INSERT INTO user (UserID, Name, Email, PhoneNumber, Password)
 VALUES
-(11, 'Sai Kumar', 'sai.kumar@gmail.com', '7896543210', '*%*7*6!#k*5!!!V'),
-(3, 'Vansh Mehta', 'vansh.mehta@gmail.com', '8112345678', '$j!!!!8l%'),
-(8, 'Kiara Singh', 'kiara.singh@gmail.com', '8223456789', '01&%k*%2**m!7'),
-(22, 'Anaya Joshi', 'anaya.joshi@gmail.com', '8345678901', 'F0!$0#h5**%170n'),
-(10, 'Arjun Reddy', 'arjun.reddy@gmail.com', '8654321098', '!t8*!E0Qz!FZ%o'),
-(31, 'Aditya Verma', 'aditya.verma@gmail.com', '8765432109', '**Z&#*8*F7'),
-(4, 'Vivaan Sharma', 'vivaan.sharma@gmail.com', '9123456789', '8x*Wz!!*7G4i!OV&'),
-(1, 'Vihaan Gupta', 'vihaan.gupta@gmail.com', '9301234567', 'uJ#f%*0S!'),
-(2, 'Aarav Patel', 'aarav.patel@gmail.com', '9876543210', '1v&n!Fo!b%a%2'),
-(14, 'Revanth Reddy', 'revanth.reddy@gmail.com', '9988776655', '4h#!!j5!$');
+(1, 'Test User 1', 'test.user1@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(2, 'Test User 2', 'test.user2@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(3, 'Test User 3', 'test.user3@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(4, 'Test User 4', 'test.user4@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(8, 'Test User 5', 'test.user5@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(10, 'Test User 6', 'test.user6@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(11, 'Test User 7', 'test.user7@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(14, 'Test User 8', 'test.user8@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(22, 'Test User 9', 'test.user9@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
+(31, 'Test User 10', 'test.user10@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]');
 
 INSERT INTO screen (ScreenID, ScreenNumber, TotalSeats, TheaterID)
 VALUES
