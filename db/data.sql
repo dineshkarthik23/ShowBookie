@@ -92,8 +92,6 @@ VALUES
 (103, 'Shawshank Redemption', 'Supernatural','Thriller', 142, '1994-10-14', 'English', 9.3),
 (104, 'Interstellar', 'Sci-fi','Adventure', 170, '2014-11-1', 'English', 8.7);
 
--- NOTE: Test user data. Passwords are placeholders and must be hashed locally before production use.
--- See db/README.md for instructions on setting up passwords with proper hashing.
 INSERT INTO user (UserID, Name, Email, PhoneNumber, Password)
 VALUES
 (1, 'Test User 1', 'test.user1@example.com', '9999999999', '[HASHED_PASSWORD_PLACEHOLDER]'),
