@@ -1,70 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Showbookie</title>
-    <link rel="stylesheet" href="/css/moviestyle.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn about the upgraded ShowBookie architecture and product flow.">
+  <meta property="og:title" content="About | ShowBookie">
+  <meta property="og:description" content="Learn about the upgraded ShowBookie architecture and product flow.">
+  <meta name="theme-color" content="#e85d04">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/images/movie1.jpeg">
+  <link rel="stylesheet" href="/css/app.css">
+  <title>About | ShowBookie</title>
 </head>
-<body>
-    <header>
-        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
-                <div class="search-box">
-            <span class="search-icon" aria-hidden="true"></span>
-            <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
-            <div id="search-suggestions" class="search-suggestions hidden"></div>
-        </div>
-        <div id="user-info" class="user-menu">
-            <span id="username" class="username-label"></span>
-            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
-                <span id="profile-avatar" class="profile-avatar">U</span>
-            </button>
-            <div class="profile-dropdown">
-                <a href="/html/profile.html" data-action="profile-info">Profile info</a>
-                <a href="/html/bookinghist.html">Booking history</a>
-                <button type="button" data-action="theme">Theme: Light</button>
-                <a href="#" data-action="settings">Settings</a>
-                <a href="/logout">Logout</a>
-            </div>
-        </div>
-    </header>
-
-    <nav>
-        <a href="/html/list.html">Movies</a>
-        <a href="/html/bookinghist.html">Booking History</a>
-        <a href="/html/about.html" class="active">About</a>
-        <a href="/html/contact.html">Contact us</a>
-    </nav>
-
-    <main class="main-content">
-        <section class="page-panel">
-            <h1 class="page-title">About Showbookie</h1>
-            <p class="page-subtitle">Your movie-ticket partner for a smooth and fast booking experience.</p>
-
-            <p>
-                Showbookie is built to make booking movie tickets simple, quick, and reliable. From choosing
-                the latest releases to selecting seats and completing payment, every step is designed to be
-                clear and convenient.
-            </p>
-            <br>
-            <p>
-                We focus on a clean browsing experience, secure booking flow, and easy access to your booking
-                history so you can spend less time navigating and more time enjoying your shows.
-            </p>
-            <br>
-            <p>
-                Whether you are planning a weekend movie or a last-minute show, Showbookie gives you a faster
-                way to get to the big screen.
-            </p>
-        </section>
-    </main>
-
-    <div class="stream-banner">
-        <span>Endless Entertainment Anytime, Anywhere!</span>
-    </div>
-
-    <script src="/shell.js"></script>
+<body data-page="about">
+  <div id="app"></div>
+  <div id="modal-root"></div>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>
-
-

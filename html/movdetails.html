@@ -1,139 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DJANGO | Showbookie</title>
-  <link rel="stylesheet" href="/css/moviestyle.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Movie details, showtimes, and booking options on ShowBookie.">
+  <meta property="og:title" content="Movie Details | ShowBookie">
+  <meta property="og:description" content="Movie details, showtimes, and booking options on ShowBookie.">
+  <meta name="theme-color" content="#e85d04">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/images/movie1.jpeg">
+  <link rel="stylesheet" href="/css/app.css">
+  <title>Movie Details | ShowBookie</title>
 </head>
-<body>
-    <header>
-        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
-        <div class="search-box">
-            <span class="search-icon" aria-hidden="true"></span>
-            <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
-            <div id="search-suggestions" class="search-suggestions hidden"></div>
-        </div>
-        <div id="user-info" class="user-menu">
-            <span id="username" class="username-label"></span>
-            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
-                <span id="profile-avatar" class="profile-avatar">U</span>
-            </button>
-            <div class="profile-dropdown">
-                <a href="/html/profile.html" data-action="profile-info">Profile info</a>
-                <a href="/html/bookinghist.html">Booking history</a>
-                <button type="button" data-action="theme">Theme: Light</button>
-                <a href="#" data-action="settings">Settings</a>
-                <a href="/logout">Logout</a>
-            </div>
-        </div>
-    </header>
-
-    <nav>
-        <a href="/html/list.html" class="active">Movies</a>
-        <a href="/html/bookinghist.html">Booking History</a>
-        <a href="/html/about.html">About</a>
-        <a href="/html/contact.html">Contact us</a>
-    </nav>
-
-    <main class="main-content">
-      <section class="page-panel">
-        <div class="movie-header">
-          <h1>DJANGO - English</h1>
-          <span>A 18+  Western/Action</span>
-        </div>
-
-  <div class="date-selection">
-    <button class="date-btn active" type="button"></button>
-    <button class="date-btn" type="button"></button>
-    <button class="date-btn" type="button"></button>
-  </div>
-
-  <div class="theater">
-      <h3>PVR INOX ,Shenoy Nagar</h3>
-      <div class="showtimes">
-          <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20INOX%20Shenoy%20Nagar&time=1:00%20PM'">1:00 PM</button>
-          <button class="showtime-btn fast-filling" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20INOX%20Shenoy%20Nagar&time=7:00%20PM'">7:00 PM</button>
-          <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20INOX%20Shenoy%20Nagar&time=11:00%20PM'">11:00 PM</button>
-      </div>
-  </div>
-
-  <div class="theater">
-      <h3>PVR Grand Mall, Velachery</h3>
-      <div class="showtimes">
-          <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20Grand%20Mall%20Velachery&time=12:25%20PM'">12:25 PM</button>
-          <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20Grand%20Mall%20Velachery&time=4:10%20PM'">4:10 PM</button>
-          <button class="showtime-btn" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20Grand%20Mall%20Velachery&time=6:40%20PM'">6:40 PM</button>
-      </div>
-  </div>
-
-  <div class="theater">
-      <h3>PVR Ampa Mall, Adyar</h3>
-      <div class="showtimes">
-          <button class="showtime-btn fast-filling" onclick="window.location.href='seats.html?movie=DJANGO&theater=PVR%20Ampa%20Mall%20Adyar&time=9:30%20PM'">9:30 PM</button>
-      </div>
-  </div>
-      </section>
-    </main>
-
-    <div class="stream-banner">
-        <span>Endless Entertainment Anytime, Anywhere!</span>
-    </div>
-
-    <script src="/shell.js"></script>
-  <script>
-    const dateButtons = Array.from(document.querySelectorAll('.date-btn'));
-    const showtimeButtons = Array.from(document.querySelectorAll('.showtime-btn'));
-
-    function toIsoDate(dateObj) {
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    function toLabel(dateObj) {
-      return dateObj
-        .toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-        .toUpperCase();
-    }
-
-    const baseDate = new Date();
-    let selectedDate = toIsoDate(baseDate);
-
-    dateButtons.forEach((button, index) => {
-      const current = new Date(baseDate);
-      current.setDate(baseDate.getDate() + index);
-      const isoDate = toIsoDate(current);
-
-      button.textContent = toLabel(current);
-      button.dataset.isoDate = isoDate;
-      button.classList.toggle('active', index === 0);
-
-      button.onclick = (event) => {
-        event.preventDefault();
-        selectedDate = isoDate;
-        dateButtons.forEach((btn) => btn.classList.remove('active'));
-        button.classList.add('active');
-      };
-    });
-
-    showtimeButtons.forEach((button) => {
-      const onclickValue = button.getAttribute('onclick') || '';
-      const match = onclickValue.match(/window\.location\.href='([^']+)'/);
-      if (!match) {
-        return;
-      }
-
-      const baseTarget = match[1];
-      button.onclick = (event) => {
-        event.preventDefault();
-        const url = new URL(baseTarget, window.location.href);
-        url.searchParams.set('date', selectedDate);
-        window.location.href = `${url.pathname}${url.search}`;
-      };
-    });
-  </script>
-
+<body data-page="details" data-movie-slug="django">
+  <div id="app"></div>
+  <div id="modal-root"></div>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>

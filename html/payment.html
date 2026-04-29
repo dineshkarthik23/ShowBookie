@@ -1,146 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Payment | Showbookie</title>
-    <link rel="stylesheet" href="/css/moviestyle.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Review your ShowBookie order, apply promo codes, and complete the mock checkout flow.">
+  <meta property="og:title" content="Checkout | ShowBookie">
+  <meta property="og:description" content="Review your ShowBookie order, apply promo codes, and complete the mock checkout flow.">
+  <meta name="theme-color" content="#e85d04">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/images/movie2.jpeg">
+  <link rel="stylesheet" href="/css/app.css">
+  <title>Checkout | ShowBookie</title>
 </head>
-<body>
-    <header>
-        <a class="logo" href="/movie.html">Show<span>bookie</span></a>
-        <div class="search-box">
-            <span class="search-icon" aria-hidden="true"></span>
-            <input id="movie-search" type="text" placeholder="Search for Movies" autocomplete="off" />
-            <div id="search-suggestions" class="search-suggestions hidden"></div>
-        </div>
-        <div id="user-info" class="user-menu">
-            <span id="username" class="username-label"></span>
-            <button id="profile-trigger" class="profile-trigger" type="button" aria-label="Profile options">
-                <span id="profile-avatar" class="profile-avatar">U</span>
-            </button>
-            <div class="profile-dropdown">
-                <a href="/html/profile.html" data-action="profile-info">Profile info</a>
-                <a href="/html/bookinghist.html">Booking history</a>
-                <button type="button" data-action="theme">Theme: Light</button>
-                <a href="#" data-action="settings">Settings</a>
-                <a href="/logout">Logout</a>
-            </div>
-        </div>
-    </header>
-
-    <nav>
-        <a href="/html/list.html" class="active">Movies</a>
-        <a href="/html/bookinghist.html">Booking History</a>
-        <a href="/html/about.html">About</a>
-        <a href="/html/contact.html">Contact us</a>
-    </nav>
-
-    <main class="main-content">
-      <section class="page-panel payment-panel">
-        <h1>Payment</h1>
-
-        <div class="payment-section">
-            <h2>Selected Seats</h2>
-            <div class="selected-seats" id="selected-seats">
-            </div>
-        </div>
-        <div class="payment-section">
-            <h2>Payment Details</h2>
-            <div class="payment-details">
-                <label for="card-number">Card Number:</label>
-                <input type="text" id="card-number" placeholder="Enter your card number" required />
-
-                <label for="expiry-date">Expiry Date:</label>
-                <input type="text" id="expiry-date" placeholder="MM/YY" required />
-
-                <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" placeholder="Enter CVV" required />
-            </div>
-        </div>
-        <div class="confirm-button">
-            <button id="confirm-payment">Confirm Payment</button>
-        </div>
-      </section>
-    </main>
-
-    <div class="stream-banner">
-        <span>Endless Entertainment Anytime, Anywhere!</span>
-    </div>
-
-    <script src="/shell.js"></script>
-
-    <script>
-        const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats') || '[]');
-        const selectedSeatsContainer = document.getElementById('selected-seats');
-        const movieTitle = localStorage.getItem('movieTitle') || '';
-        const theater = localStorage.getItem('theater') || '';
-        const showtime = localStorage.getItem('showtime') || '';
-        const date = localStorage.getItem('date') || '';
-
-        if (selectedSeats.length > 0) {
-            selectedSeats.forEach(seat => {
-                const seatElement = document.createElement('div');
-                seatElement.classList.add('seat');
-                seatElement.innerText = seat;
-                selectedSeatsContainer.appendChild(seatElement);
-            });
-        } else {
-            selectedSeatsContainer.innerHTML = '<p>No seats selected.</p>';
-        }
-
-        document.getElementById('confirm-payment').addEventListener('click', async () => {
-            const cardNumber = document.getElementById('card-number').value.trim();
-            const expiryDate = document.getElementById('expiry-date').value.trim();
-            const cvv = document.getElementById('cvv').value.trim();
-
-            if (!cardNumber || !expiryDate || !cvv) {
-                alert('Please fill in all payment details.');
-                return;
-            }
-
-            if (!movieTitle || selectedSeats.length === 0) {
-                alert('Missing booking details. Please reselect seats.');
-                window.location.href = 'seats.html';
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/bookings', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        movieTitle,
-                        theater,
-                        showtime,
-                        date,
-                        selectedSeats,
-                        paymentMode: 'Card'
-                    })
-                });
-
-                if (response.status === 401) {
-                    alert('Please login to continue.');
-                    window.location.href = '/';
-                    return;
-                }
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.error || 'Booking could not be completed.');
-                }
-
-                const data = await response.json();
-                localStorage.setItem('latestBooking', JSON.stringify(data.booking));
-                alert('Payment successful! Redirecting to booking confirmation...');
-                window.location.href = 'booking.html';
-            } catch (error) {
-                console.error('Payment/booking error:', error);
-                alert(error.message || 'Payment failed. Please try again.');
-            }
-        });
-    </script>
+<body data-page="checkout">
+  <div id="app"></div>
+  <div id="modal-root"></div>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>

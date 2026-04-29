@@ -1,16 +1,17 @@
 {
-  "name": "js",
-  "version": "1.0.0",
-  "main": "database.js",
+  "name": "showbookie",
+  "version": "2.0.0",
+  "main": "app.js",
   "type": "module",
   "scripts": {
+    "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/run-tests.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Productionized lightweight movie ticket booking demo with vanilla JS, localStorage persistence, and mock admin workflows.",
   "devDependencies": {
     "nodemon": "^3.1.9"
   },
