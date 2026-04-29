@@ -139,9 +139,12 @@ export function validateRegistration(values) {
     name: validateName(values.name),
     email: validateEmail(values.email),
     password: validatePassword(values.password),
+    confirmPassword: '',
   };
-  if (!values.acceptTerms) {
-    errors.acceptTerms = 'You must accept the terms to continue.';
+  if (!String(values.confirmPassword ?? '')) {
+    errors.confirmPassword = 'Please confirm your password.';
+  } else if (String(values.password) !== String(values.confirmPassword)) {
+    errors.confirmPassword = 'Passwords do not match.';
   }
   return Object.fromEntries(Object.entries(errors).filter(([, message]) => message));
 }

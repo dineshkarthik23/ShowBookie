@@ -350,9 +350,9 @@ export const SEED_DATA = {
   users: [
     {
       id: 'user_admin',
-      name: 'Admin User',
-      email: 'admin@showbookie.com',
-      password: 'Admin@123',
+      name: 'Local Admin',
+      email: 'local-admin@showbookie.local',
+      password: 'LocalAdmin@123',
       role: 'admin',
       phone: '+91 90000 12345',
       locale: 'en',
@@ -360,23 +360,6 @@ export const SEED_DATA = {
       lastLoginAt: '',
       favorites: ['mov_dune2', 'mov_interstellar'],
       recentlyViewed: ['mov_dune2'],
-      notifications: [],
-      preferences: {
-        theme: 'light',
-      },
-    },
-    {
-      id: 'user_demo',
-      name: 'Demo Viewer',
-      email: 'demo@showbookie.com',
-      password: 'Demo@123',
-      role: 'user',
-      phone: '+91 98888 77777',
-      locale: 'en',
-      createdAt: new Date().toISOString(),
-      lastLoginAt: '',
-      favorites: ['mov_django'],
-      recentlyViewed: ['mov_django', 'mov_interstellar'],
       notifications: [],
       preferences: {
         theme: 'light',

@@ -44,6 +44,19 @@ function ensureDbShape(data) {
   db.bookings = Array.isArray(db.bookings) ? db.bookings : [];
   db.supportRequests = Array.isArray(db.supportRequests) ? db.supportRequests : [];
   db.notifications = Array.isArray(db.notifications) ? db.notifications : [];
+  db.users = Array.isArray(db.users) ? db.users : [];
+  db.users = db.users
+    .filter((user) => normalizeEmail(user.email) !== 'demo@showbookie.com')
+    .map((user) =>
+      user.role === 'admin'
+        ? {
+            ...user,
+            name: user.name || 'Local Admin',
+            email: 'local-admin@showbookie.local',
+            password: user.password || 'LocalAdmin@123',
+          }
+        : user
+    );
   return db;
 }
 

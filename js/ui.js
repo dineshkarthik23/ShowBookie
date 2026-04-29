@@ -260,36 +260,39 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
   const themeButton = el('button', { className: 'header-action', type: 'button', text: 'Theme' });
   themeButton.addEventListener('click', () => onThemeToggle?.());
 
+  const pagesNav = el(
+    'nav',
+    { className: 'site-nav', attrs: { 'aria-label': 'Primary navigation' } },
+    links.map((link) =>
+      el('a', {
+        href: link.href,
+        className: activePage === link.page ? 'nav-link active' : 'nav-link',
+        text: link.label,
+      })
+    )
+  );
+
+  const actionsOval = el('div', { className: 'header-tools' }, [
+    localeSelect,
+    themeButton,
+    notificationsButton,
+    user
+      ? el('div', { className: 'header-user-stack' }, [
+          el('a', { href: APP_CONFIG.routeMap.profile, className: 'profile-pill', ariaLabel: 'Open profile' }, [
+            el('span', { className: 'profile-avatar', text: getInitials(user.name) }),
+            el('span', { className: 'sr-only', text: user.name }),
+          ]),
+          el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-secondary action-compact', text: 'Logout', dataset: { action: 'logout' } }),
+        ])
+      : el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-primary sign-in-button', text: 'Sign in' }),
+  ]);
+
   return el('header', { className: 'site-header' }, [
     el('div', { className: 'brand-group' }, [
       el('a', { href: APP_CONFIG.routeMap.home, className: 'brand-mark', text: APP_CONFIG.appName }),
       el('p', { className: 'brand-copy', text: 'Book today. Print instantly. Rebook smartly.' }),
     ]),
-    el(
-      'nav',
-      { className: 'site-nav', attrs: { 'aria-label': 'Primary navigation' } },
-      links.map((link) =>
-        el('a', {
-          href: link.href,
-          className: activePage === link.page ? 'nav-link active' : 'nav-link',
-          text: link.label,
-        })
-      )
-    ),
-    el('div', { className: 'header-tools' }, [
-      localeSelect,
-      themeButton,
-      notificationsButton,
-      user
-        ? el('div', { className: 'header-user-stack' }, [
-            el('a', { href: APP_CONFIG.routeMap.profile, className: 'profile-pill' }, [
-              el('span', { className: 'profile-avatar', text: getInitials(user.name) }),
-              el('span', { text: user.name }),
-            ]),
-            el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-secondary', text: 'Logout', dataset: { action: 'logout' } }),
-          ])
-        : el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-primary', text: 'Sign in' }),
-    ]),
+    el('div', { className: 'nav-right' }, [pagesNav, actionsOval]),
   ]);
 }
 

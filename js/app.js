@@ -185,7 +185,7 @@ function renderAuthPage() {
   const next = new URLSearchParams(window.location.search).get('next') || APP_CONFIG.routeMap.home;
   const wrapper = el('div', { className: 'auth-shell' }, []);
 
-  const tabs = el('div', { className: 'tab-row' }, []);
+  const tabs = el('div', { className: 'tab-row auth-tab-row' }, []);
   const forms = el('div', { className: 'auth-forms' }, []);
 
   const createField = (label, input, errorId) =>
@@ -205,10 +205,16 @@ function renderAuthPage() {
     type: 'password',
     attrs: { autocomplete: 'current-password', placeholder: 'Password' },
   });
+  const forgotPassword = el('a', {
+    href: '#',
+    className: 'forgot-password-link',
+    text: 'Forgot password?',
+  });
   const loginError = el('p', { className: 'form-error' });
   const loginForm = el('form', { className: 'auth-form' }, [
     createField('Email', loginEmail, 'login-email-error'),
     createField('Password', loginPassword, 'login-password-error'),
+    el('div', { className: 'auth-form-meta' }, [forgotPassword]),
     loginError,
     el('button', { className: 'button button-primary', type: 'submit', text: 'Sign in' }),
   ]);
@@ -216,17 +222,17 @@ function renderAuthPage() {
   const registerName = el('input', { id: 'register-name', type: 'text', attrs: { placeholder: 'Full name' } });
   const registerEmail = el('input', { id: 'register-register-email', type: 'email', attrs: { placeholder: 'Email address' } });
   const registerPassword = el('input', { id: 'register-password', type: 'password', attrs: { placeholder: 'Create password' } });
-  const termsCheckbox = el('input', { id: 'register-terms', type: 'checkbox' });
+  const registerConfirmPassword = el('input', {
+    id: 'register-confirm-password',
+    type: 'password',
+    attrs: { placeholder: 'Confirm password' },
+  });
   const registerError = el('p', { className: 'form-error' });
   const registerForm = el('form', { className: 'auth-form hidden' }, [
     createField('Name', registerName, 'register-name-error'),
     createField('Email', registerEmail, 'register-email-error'),
     createField('Password', registerPassword, 'register-password-error'),
-    el('label', { className: 'inline-check', attrs: { for: 'register-terms' } }, [
-      termsCheckbox,
-      el('span', { text: 'I agree to the terms and privacy policy.' }),
-    ]),
-    el('small', { className: 'field-error', id: 'register-terms-error' }),
+    createField('Confirm password', registerConfirmPassword, 'register-confirm-password-error'),
     registerError,
     el('button', { className: 'button button-primary', type: 'submit', text: 'Create account' }),
   ]);
@@ -243,6 +249,15 @@ function renderAuthPage() {
   registerTab.addEventListener('click', () => activate('register'));
   tabs.append(loginTab, registerTab);
   forms.append(loginForm, registerForm);
+
+  forgotPassword.addEventListener('click', (event) => {
+    event.preventDefault();
+    showToast({
+      title: 'Password recovery',
+      message: 'Password recovery UI is not wired yet, but your account data remains stored locally.',
+      type: 'info',
+    });
+  });
 
   loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -262,16 +277,17 @@ function renderAuthPage() {
       name: registerName.value,
       email: registerEmail.value,
       password: registerPassword.value,
-      acceptTerms: termsCheckbox.checked,
+      confirmPassword: registerConfirmPassword.value,
     });
 
-    ['name', 'email', 'password', 'acceptTerms'].forEach((key) => {
-      const target = document.getElementById(`register-${key === 'acceptTerms' ? 'terms' : key}-error`);
+    ['name', 'email', 'password', 'confirm-password'].forEach((key) => {
+      const resultKey = key === 'confirm-password' ? 'confirmPassword' : key;
+      const target = document.getElementById(`register-${key}-error`);
       if (target) {
-        target.textContent = result.errors?.[key] || '';
+        target.textContent = result.errors?.[resultKey] || '';
       }
     });
-    registerError.textContent = '';
+    registerError.textContent = result.errors?.form || '';
     if (result.ok) {
       showToast({ title: 'Account created', message: 'Your ShowBookie account is ready.', type: 'success' });
       redirectTo(next);
@@ -279,31 +295,25 @@ function renderAuthPage() {
   });
 
   wrapper.append(
-    createHero({
-      eyebrow: 'Productionized demo flow',
-      title: t('auth.welcome'),
-      description: t('auth.subtitle'),
-      actions: [
-        { href: APP_CONFIG.routeMap.about, label: 'Explore features', kind: 'secondary' },
-        { href: APP_CONFIG.routeMap.help, label: 'Need help?' },
-      ],
-      image: '/images/Dune Wallpaper.jpg',
-      chips: ['PWA ready', 'Local persistence', 'Mock admin panel'],
-    }),
     createSection(
       'Access your account',
-      'Use the demo credentials or create a new account instantly.',
-      el('div', { className: 'card-surface auth-card' }, [tabs, forms])
-    ),
-    createSection(
-      'What is included',
-      'This upgraded version keeps the lightweight stack and fills the missing production basics.',
-      el('div', { className: 'feature-grid' }, [
-        infoCard('Complete booking journey', 'Browse, select seats, pay, print ticket, review history, and cancel eligible bookings.'),
-        infoCard('Admin tools', 'Manage movies, shows, pricing layouts, and monitor occupancy and revenue.'),
-        infoCard('Ready for deployment', 'Static-friendly assets, service worker, manifest, robots, sitemap, tests, and docs.'),
+      'Sign in to continue booking or create a new account in a few seconds.',
+      el('div', { className: 'auth-entry-layout' }, [
+        el('div', { className: 'auth-intro-panel card-surface nested-surface' }, [
+          el('span', { className: 'eyebrow', text: 'Welcome back' }),
+          el('h1', { className: 'auth-title', text: 'Sign in to plan your next movie night' }),
+          el('p', {
+            text: 'Browse current releases, save favorites, and keep your booking history in one place.',
+          }),
+          el('div', { className: 'auth-benefits' }, [
+            infoCard('Fast booking', 'Pick a showtime, select seats, and check out without losing your progress.'),
+            infoCard('Saved activity', 'Your wishlist, recent views, and booking history stay available on this browser.'),
+            infoCard('Helpful support', 'Need assistance? The Help and About sections stay one click away.'),
+          ]),
+        ]),
+        el('div', { className: 'card-surface auth-card' }, [tabs, forms]),
       ])
-    )
+    ),
   );
 
   root.replaceChildren(
@@ -324,8 +334,8 @@ function renderAuthPage() {
           renderApp();
         },
       }),
-      hero: wrapper.firstChild,
-      main: el('main', { className: 'page-main' }, Array.from(wrapper.children).slice(1)),
+      hero: null,
+      main: el('main', { className: 'page-main auth-main' }, Array.from(wrapper.children)),
       footer: createFooter(),
       notifications: createNotificationDrawer([]),
     })
@@ -1270,7 +1280,7 @@ function renderHelpPage(page) {
   };
 
   const descriptions = {
-    about: 'ShowBookie keeps the stack lightweight while offering a complete mock-first booking experience.',
+    about: 'Learn the story behind ShowBookie, what we care about, and how to reach our team.',
     contact: 'Reach the support team or send a help request using the form below.',
     help: 'Find support options, emergency contacts, and quick answers for booking or payment issues.',
     faq: 'Answers to the most common questions across booking, payments, and cancellations.',
@@ -1289,12 +1299,47 @@ function renderHelpPage(page) {
   if (page === 'about') {
     sections.push(
       createSection(
-        'What changed',
-        'This repo was upgraded end to end while preserving the lightweight HTML/CSS/JS stack.',
+        'Our story',
+        'Why ShowBookie exists and what we want every moviegoer to feel.',
+        el('div', { className: 'about-story-layout' }, [
+          el('div', { className: 'about-story-copy' }, [
+            el('p', {
+              text: 'ShowBookie started with a simple idea: booking a movie should feel as easy and enjoyable as deciding what to watch. We wanted a place where people could browse quickly, compare showtimes without friction, and move from discovery to checkout without losing momentum.',
+            }),
+            el('p', {
+              text: 'Our mission is to make every outing smoother, whether you are planning a weekend with friends, a family matinee, or a last-minute solo show after work. We focus on clarity, speed, and a welcoming experience that works just as well on a phone as it does on a larger screen.',
+            }),
+            el('p', {
+              text: 'Behind the scenes, ShowBookie is designed around practical details people care about: easy seat selection, straightforward pricing, quick access to tickets, and support that feels human when plans change.',
+            }),
+          ]),
+          el('div', { className: 'about-contact-card card-surface nested-surface' }, [
+            el('h3', { text: 'Visit or contact us' }),
+            createDetailList([
+              ['Address', '214 Crescent Arcade, Lakeview Road, Nungambakkam, Chennai 600034'],
+              ['Email', 'hello@showbookie.in'],
+              ['Phone', '+91 44 4012 8899'],
+              ['Business hours', 'Mon-Sat, 9:00 AM to 7:00 PM'],
+            ]),
+          ]),
+        ])
+      ),
+      createSection(
+        'Our values',
+        'A few principles that shape the product experience.',
         el('div', { className: 'feature-grid' }, [
-          infoCard('Normalized mock backend', 'Movies, theaters, shows, seat maps, bookings, and users persist through localStorage.'),
-          infoCard('Reusable components', 'Shared navbar, cards, summary blocks, modal, toasts, notification center, and responsive layout.'),
-          infoCard('Operational extras', 'PWA basics, SEO metadata, client-side guards, tests, and updated docs are all included.'),
+          infoCard('Clarity first', 'From pricing to seat selection, every interaction should feel obvious and trustworthy.'),
+          infoCard('Time matters', 'We remove unnecessary steps so users can complete bookings with confidence and speed.'),
+          infoCard('People over process', 'Support, cancellation handling, and account tools should reduce stress instead of adding to it.'),
+        ])
+      ),
+      createSection(
+        'Contact block',
+        'If you need help with a ticket, account, or refund question, our support desk is ready to help.',
+        el('div', { className: 'feature-grid' }, [
+          infoCard('Support desk', 'hello@showbookie.in'),
+          infoCard('Call us', '+91 44 4012 8899'),
+          infoCard('Office hours', 'Monday to Saturday, 9:00 AM to 7:00 PM'),
         ])
       )
     );
@@ -1354,7 +1399,7 @@ function renderHelpPage(page) {
           faqItem('How do I simulate a failed payment?', 'Use a card ending in 0000. A card ending in 1111 fails once and succeeds on retry.'),
           faqItem('Where are my bookings stored?', 'Bookings persist in localStorage through the normalized mock backend.'),
           faqItem('Can I cancel any booking?', `Only before ${APP_CONFIG.policies.cancellationHours} hours of showtime in this mock policy.`),
-          faqItem('How do I access the admin panel?', 'Sign in with admin@showbookie.com / Admin@123 and open the Admin page.'),
+          faqItem('How do I access the admin panel?', 'Admin access is reserved for locally configured development roles and is not surfaced in the public sign-in UI.'),
         ])
       )
     );
@@ -1388,11 +1433,11 @@ function renderHelpPage(page) {
     createShell(
       page,
       createHero({
-        eyebrow: 'Support and policies',
+        eyebrow: page === 'about' ? 'Who we are' : 'Support and policies',
         title: titleMap[page],
         description: descriptions[page],
         image: '/images/pexels-felipe-cardoso-861539-1764338.jpg',
-        chips: ['Accessible', 'Static', 'Deployment-friendly'],
+        chips: page === 'about' ? ['Story', 'Support', 'Values'] : ['Accessible', 'Static', 'Deployment-friendly'],
       }),
       sections
     )
@@ -1564,7 +1609,7 @@ async function renderApp() {
     return;
   }
   if (page === 'admin' && user?.role !== 'admin') {
-    root.replaceChildren(createShell('admin', null, [createStatusState('error', 'Admin access required', 'Sign in with the demo admin account to access this page.')]));
+    root.replaceChildren(createShell('admin', null, [createStatusState('error', 'Admin access required', 'This page is reserved for locally configured admin accounts.')]));
     return;
   }
 
