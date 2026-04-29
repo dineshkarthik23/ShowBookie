@@ -1,108 +1,117 @@
-# 🎬 ShowBookie - Movie Ticket Booking System
+# ShowBookie
 
-A modern, web-based movie ticket booking platform with unique cancellation and rebooking features. Built with Node.js, Express.js, and MySQL.
+ShowBookie is a lightweight, vanilla HTML/CSS/JS movie ticket booking app with a productionized mock-first flow. The app now runs end to end without a database dependency and keeps the existing multi-page structure while centralizing logic into reusable modules.
 
-## ✨ Features
+## What’s Included
 
-- **User Authentication** - Secure registration/login with password encryption
-- **Movie Listings** - Browse movies with details (genre, duration, language, ratings)
-- **Theater & Show Management** - Multiple theaters, screens, and showtimes
-- **Interactive Seat Selection** - Real-time seat availability with temporary locking
-- **Secure Payments** - Safe transaction processing
-- **Smart Cancellation & Rebooking** - Cancel and rebook for another show on the same day without additional charges
-- **Booking History** - Track all past and upcoming bookings
-- **Responsive Design** - Seamless experience across devices
+- Auth flow with demo login, registration, route guards, and profile management
+- Movie discovery with search, sort, genre/language/rating/date filters, pagination, recommendations, recently viewed, and wishlist persistence
+- Movie details with grouped showtimes, occupancy hints, and seat-map-driven pricing
+- Seat booking with keyboard-friendly selection, reserved seat locking, max seat cap, clear selection, and live totals
+- Checkout with promo codes, tax and convenience-fee breakdown, deterministic mock payment failure/retry flows, and booking confirmation
+- Booking history with search/filter, printable tickets, downloadable ticket HTML, and mock cancellation rules
+- Admin panel with mock auth, dashboard metrics, and CRUD for movies and shows
+- PWA basics, offline fallback, robots/sitemap, dark mode, i18n scaffolding, notifications center, and lightweight unit tests
 
-## 🛠️ Tech Stack
+## Demo Accounts
 
-### Frontend
-- HTML5, CSS3, JavaScript
+- User: `demo@showbookie.com` / `Demo@123`
+- Admin: `admin@showbookie.com` / `Admin@123`
 
-### Backend
-- Node.js with Express.js
-- RESTful API architecture
+## Run Locally
 
-### Database
-- MySQL
-
-## 📋 Database Schema
-
-The system consists of 8 core tables:
-- **User** - User information and authentication
-- **Movie** - Movie details (title, genre, duration, etc.)
-- **Theatre** - Theater information and location
-- **Screen** - Screen details within theaters
-- **Shows** - Showtimes linking movies to screens
-- **Booking** - User booking records
-- **Seats** - Seat management and allocation
-- **Payment** - Transaction records
-
-## 🚀 Key Functionalities
-
-### 1. User Registration & Authentication
-- Secure account creation and login
-- Password hashing for data security
-
-### 2. Movie & Show Selection
-- Browse available movies
-- View showtimes across different theaters
-
-### 3. Seat Selection
-- Visual seat layout
-- Real-time availability checking
-- Temporary seat locking during booking
-
-### 4. Booking Management
-- Complete booking workflow
-- Payment processing
-- Instant confirmation
-
-### 5. Smart Cancellation & Rebooking
-- Cancel existing bookings
-- Rebook same movie, different show on same day
-- No convenience fees for rebooking
-
-### 6. Booking History
-- View past transactions
-- Track upcoming bookings
-
-## 🏗️ Project Structure
-
-```
-movie-ticket-booking/
-├── css/                  # Stylesheets
-├── db/                   # Database scripts
-├── html/                 # HTML pages
-├── images/               # Image assets
-├── .gitignore
-├── app.js                # Main application file
-├── booking-history.js    # Booking history logic
-├── database.js           # Database connection
-├── index.html           # Landing page
-├── package-lock.json
-├── package.json
-├── script.js            # Frontend scripts
-└── shell.js             # Utility functions
+```bash
+npm install
+npm start
 ```
 
-## 💡 Unique Selling Points
+Then open `http://localhost:8080`.
 
-- **Zero-cost Rebooking** - Unlike traditional systems, users can switch shows on the same day without extra charges
-- **Concurrency Control** - Prevents double booking with proper locking mechanisms
-- **Optimized for Theaters** - Helps reduce revenue loss from cancellations
-- **User-Centric Design** - Focus on seamless user experience
+For local development with reload:
 
-## 📊 ACID Compliance
+```bash
+npm run dev
+```
 
-- **Atomicity** - Complete booking/payment or none
-- **Consistency** - Valid database states maintained
-- **Isolation** - Concurrent transactions handled safely
-- **Durability** - Permanent storage after commit
+Run tests:
 
-## 🔒 Security Features
+```bash
+npm test
+```
 
-- Password encryption
-- Secure authentication
-- Data validation
-- Protection against double booking
-- Transaction integrity
+## Architecture
+
+Client modules live in `js/`:
+
+- `config.js`: constants, route map, promo rules, seed data, storage keys
+- `api.js`: normalized mock backend over `localStorage`
+- `state.js`: session, theme, locale, and booking draft persistence
+- `ui.js`: reusable UI components and formatting helpers
+- `validation.js`: form validation and input sanitization
+- `booking.js`: seat-category lookup, pricing, booking code generation, cancellation checks
+- `payments-mock.js`: deterministic payment simulation and retry behavior
+- `admin.js`: admin-specific data wrappers
+- `app.js`: app bootstrap and page rendering
+
+### Normalized Models
+
+- `Movie`
+- `Theater`
+- `Show`
+- `SeatMap`
+- `Booking`
+- `User`
+
+These are seeded in `js/config.js` and persisted as a single mock DB payload in `localStorage`.
+
+## App Flows
+
+### Booking Journey
+
+1. Sign in or create an account.
+2. Browse recommended or filtered movies.
+3. Open a movie, choose a showtime, and select seats.
+4. Review pricing, apply a promo, and complete checkout.
+5. View the confirmation ticket, print it, or download it as HTML.
+
+### Admin Journey
+
+1. Sign in with the admin account.
+2. Open `/html/admin.html`.
+3. Review dashboard cards for bookings, revenue, occupancy, movies, and shows.
+4. Add or remove movies and showtimes.
+
+## Screenshots
+
+Placeholders for project screenshots:
+
+- `docs/screenshots/login.png`
+- `docs/screenshots/home.png`
+- `docs/screenshots/seats.png`
+- `docs/screenshots/checkout.png`
+- `docs/screenshots/admin.png`
+
+## Smoke Test Checklist
+
+See [docs/SMOKE_TEST_CHECKLIST.md](docs/SMOKE_TEST_CHECKLIST.md).
+
+## Deployment Notes
+
+- The app is static-friendly and runs behind a small Express server for local serving.
+- All persistence is local to the browser via `localStorage`.
+- PWA files include `manifest.webmanifest`, `service-worker.js`, and `offline.html`.
+- SEO basics include page metadata, `robots.txt`, and `sitemap.xml`.
+
+## Known Limitations
+
+- Auth is mock-only and stored client-side.
+- Payments are simulated; no real gateway integration exists.
+- The manifest currently reuses movie imagery instead of dedicated app icons.
+- Admin CRUD updates the mock store only and does not sync to a real API.
+
+## Next Roadmap
+
+- Replace mock auth and booking persistence with a real backend
+- Add dedicated app icons and richer offline caching strategies
+- Expand locale coverage and translate more page content
+- Add E2E browser automation for the full booking journey

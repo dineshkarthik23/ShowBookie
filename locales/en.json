@@ -1,0 +1,27 @@
+{
+  "app": {
+    "name": "ShowBookie"
+  },
+  "nav": {
+    "home": "Home",
+    "movies": "Movies",
+    "history": "Booking History",
+    "contact": "Help",
+    "about": "About",
+    "admin": "Admin",
+    "favorites": "Favorites",
+    "notifications": "Notifications"
+  },
+  "auth": {
+    "welcome": "Book the latest movies in minutes",
+    "subtitle": "Demo accounts: demo@showbookie.com / Demo@123 and admin@showbookie.com / Admin@123"
+  },
+  "states": {
+    "loading": "Loading...",
+    "empty": "Nothing to show yet.",
+    "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "tagline": "Mock-first movie booking flow with smart seat selection, checkout, and admin tools."
+  }
+}
