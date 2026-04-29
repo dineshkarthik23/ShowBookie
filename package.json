@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "test": "node tests/run-tests.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",

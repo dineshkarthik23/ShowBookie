@@ -13,8 +13,8 @@
     "notifications": "Notifications"
   },
   "auth": {
-    "welcome": "Book the latest movies in minutes",
-    "subtitle": "Demo accounts: demo@showbookie.com / Demo@123 and admin@showbookie.com / Admin@123"
+    "welcome": "Welcome back to ShowBookie",
+    "subtitle": "Sign in to continue your booking journey."
   },
   "states": {
     "loading": "Loading...",

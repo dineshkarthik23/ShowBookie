@@ -13,8 +13,8 @@
     "notifications": "அறிவிப்புகள்"
   },
   "auth": {
-    "welcome": "சில நிமிடங்களில் உங்கள் திரை அனுபவத்தை பதிவு செய்யுங்கள்",
-    "subtitle": "டெமோ கணக்குகள்: demo@showbookie.com / Demo@123 மற்றும் admin@showbookie.com / Admin@123"
+    "welcome": "மீண்டும் வரவேற்கிறோம்",
+    "subtitle": "உங்கள் பதிவு பயணத்தை தொடர உள்நுழைக."
   },
   "states": {
     "loading": "ஏற்றப்படுகிறது...",
