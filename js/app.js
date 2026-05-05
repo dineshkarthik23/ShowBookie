@@ -185,7 +185,7 @@ function renderAuthPage() {
   const next = new URLSearchParams(window.location.search).get('next') || APP_CONFIG.routeMap.home;
   const wrapper = el('div', { className: 'auth-shell' }, []);
 
-  const tabs = el('div', { className: 'tab-row auth-tab-row' }, []);
+  const tabs = el('div', { className: 'auth-tabs' }, []);
   const forms = el('div', { className: 'auth-forms' }, []);
 
   const createField = (label, input, errorId) =>
@@ -1244,7 +1244,6 @@ function renderProfilePage() {
         eyebrow: user.email,
         title: user.name,
         description: 'Manage your profile, language, and booking preferences.',
-        image: '/images/movie4.jpeg',
         chips: [user.role, `${bookings.length} bookings`, `${upcoming} upcoming`],
       }),
       [
@@ -1639,7 +1638,10 @@ async function bootstrap() {
   await loadLocale(getLocalePreference());
   applyThemeToDocument();
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+    navigator.serviceWorker
+      .register('/service-worker.js', { updateViaCache: 'none' })
+      .then((registration) => registration.update())
+      .catch(() => {});
   }
   renderApp();
 }

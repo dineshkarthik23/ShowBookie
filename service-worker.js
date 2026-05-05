@@ -1,4 +1,4 @@
-const CACHE_NAME = 'showbookie-static-v1';
+const CACHE_NAME = 'showbookie-static-v2';
 const ASSETS = [
   '/',
   '/html/index.html',
@@ -30,6 +30,7 @@ const ASSETS = [
   '/js/validation.js',
   '/locales/en.json',
   '/locales/ta.json',
+  '/Entertainment.json',
   '/manifest.webmanifest',
   '/offline.html'
 ];
@@ -50,6 +51,32 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') {
+    return;
+  }
+
+  const requestUrl = new URL(event.request.url);
+  const isSameOrigin = requestUrl.origin === self.location.origin;
+  const isNavigation = event.request.mode === 'navigate';
+  const isCoreAsset =
+    isSameOrigin &&
+    (requestUrl.pathname.endsWith('.js') ||
+      requestUrl.pathname.endsWith('.css') ||
+      requestUrl.pathname === '/service-worker.js');
+
+  if (isNavigation || isCoreAsset) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() =>
+          caches.match(event.request).then((cached) => cached || caches.match('/offline.html'))
+        )
+    );
     return;
   }
 

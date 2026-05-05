@@ -6,7 +6,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 
-const PORT = Number(process.env.PORT || 8080);
+const DEFAULT_PORT = 8080;
+const REQUESTED_PORT = Number(process.env.PORT || DEFAULT_PORT);
+const MAX_PORT_ATTEMPTS = process.env.PORT ? 1 : 10;
 
 app.disable('x-powered-by');
 
@@ -63,6 +65,29 @@ app.use((_req, res) => {
   res.status(404).sendFile(path.join(__dirname, '/offline.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`ShowBookie is running on http://localhost:${PORT}`);
-});
+function startServer(port, attemptsLeft) {
+  const server = app.listen(port, () => {
+    console.log(`ShowBookie is running on http://localhost:${port}`);
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE' && attemptsLeft > 1) {
+      const nextPort = port + 1;
+      console.warn(`Port ${port} is in use. Retrying on ${nextPort}...`);
+      startServer(nextPort, attemptsLeft - 1);
+      return;
+    }
+
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Unable to start ShowBookie: port ${port} is already in use.`);
+      console.error('Set a free port with PORT=<port> and try again.');
+      process.exit(1);
+      return;
+    }
+
+    console.error('Unable to start ShowBookie:', error);
+    process.exit(1);
+  });
+}
+
+startServer(REQUESTED_PORT, MAX_PORT_ATTEMPTS);

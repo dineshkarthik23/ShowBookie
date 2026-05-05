@@ -2,6 +2,62 @@ import { APP_CONFIG } from './config.js';
 import { generateQrLikeBlock } from './booking.js';
 import { t } from './i18n.js';
 
+const LOTTIE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js';
+let lottieLoaderPromise;
+
+function ensureLottieWeb() {
+  if (window.lottie) {
+    return Promise.resolve(window.lottie);
+  }
+  if (lottieLoaderPromise) {
+    return lottieLoaderPromise;
+  }
+
+  lottieLoaderPromise = new Promise((resolve, reject) => {
+    const existingScript = document.getElementById('lottie-web-cdn');
+    if (existingScript) {
+      existingScript.addEventListener('load', () => resolve(window.lottie));
+      existingScript.addEventListener('error', () => reject(new Error('Failed to load lottie-web script.')));
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'lottie-web-cdn';
+    script.src = LOTTIE_CDN;
+    script.async = true;
+    script.addEventListener('load', () => resolve(window.lottie));
+    script.addEventListener('error', () => reject(new Error('Failed to load lottie-web script.')));
+    document.head.appendChild(script);
+  });
+
+  return lottieLoaderPromise;
+}
+
+function mountBrandLottie(container) {
+  if (!container) {
+    return;
+  }
+
+  ensureLottieWeb()
+    .then((lottie) => {
+      if (!lottie?.loadAnimation) {
+        console.error('lottie-web loaded but no loadAnimation API found.');
+        return;
+      }
+      container.replaceChildren();
+      lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/Entertainment.json',
+      });
+    })
+    .catch((error) => {
+      console.error('Unable to initialize brand animation.', error);
+    });
+}
+
 export function el(tagName, options = {}, children = []) {
   const node = document.createElement(tagName);
   const {
@@ -247,22 +303,31 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
   );
   notificationsButton.dataset.action = 'toggle-notifications';
 
-  const localeSelect = el(
-    'select',
-    { className: 'locale-select', ariaLabel: 'Language selector', value: locale },
-    APP_CONFIG.supportedLocales.map((code) =>
-      el('option', { value: code, text: code.toUpperCase(), attrs: { value: code } })
-    )
-  );
-  localeSelect.value = locale;
-  localeSelect.addEventListener('change', (event) => onLocaleChange?.(event.target.value));
+  const availableLocales = Array.isArray(APP_CONFIG.supportedLocales) && APP_CONFIG.supportedLocales.length
+    ? APP_CONFIG.supportedLocales
+    : ['en'];
+  const currentLocale = availableLocales.includes(locale) ? locale : availableLocales[0];
+  const langButton = el('button', {
+    className: 'lang-btn',
+    type: 'button',
+    ariaLabel: 'Language selector',
+    text: `${currentLocale.toUpperCase()} ▾`,
+  });
+  langButton.addEventListener('click', () => {
+    if (!availableLocales.length) {
+      return;
+    }
+    const currentIndex = availableLocales.indexOf(currentLocale);
+    const nextLocale = availableLocales[(currentIndex + 1) % availableLocales.length];
+    onLocaleChange?.(nextLocale);
+  });
 
   const themeButton = el('button', { className: 'header-action', type: 'button', text: 'Theme' });
   themeButton.addEventListener('click', () => onThemeToggle?.());
 
   const pagesNav = el(
     'nav',
-    { className: 'site-nav', attrs: { 'aria-label': 'Primary navigation' } },
+    { className: 'nav-pages', attrs: { 'aria-label': 'Primary navigation' } },
     links.map((link) =>
       el('a', {
         href: link.href,
@@ -272,28 +337,47 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
     )
   );
 
-  const actionsOval = el('div', { className: 'header-tools' }, [
-    localeSelect,
+  // Sign-in or profile block
+  const authBlock = user
+    ? el('div', { className: 'header-user-stack' }, [
+        el('a', { href: APP_CONFIG.routeMap.profile, className: 'profile-pill', ariaLabel: 'Open profile' }, [
+          el('span', { className: 'profile-avatar', text: getInitials(user.name) }),
+          el('span', { className: 'sr-only', text: user.name }),
+        ]),
+        el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-secondary action-compact', text: 'Logout', dataset: { action: 'logout' } }),
+      ])
+    : (() => {
+        const btn = el('button', { className: 'btn-signin', type: 'button' }, [
+          el('span', { className: 'icon', text: '🔐' }),
+          el('span', { text: 'Sign in' }),
+        ]);
+        btn.addEventListener('click', () => { window.location.href = APP_CONFIG.routeMap.login; });
+        return btn;
+      })();
+
+  const actionsRow = el('div', { className: 'nav-actions' }, [
+    langButton,
     themeButton,
     notificationsButton,
-    user
-      ? el('div', { className: 'header-user-stack' }, [
-          el('a', { href: APP_CONFIG.routeMap.profile, className: 'profile-pill', ariaLabel: 'Open profile' }, [
-            el('span', { className: 'profile-avatar', text: getInitials(user.name) }),
-            el('span', { className: 'sr-only', text: user.name }),
-          ]),
-          el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-secondary action-compact', text: 'Logout', dataset: { action: 'logout' } }),
-        ])
-      : el('a', { href: APP_CONFIG.routeMap.login, className: 'button button-primary sign-in-button', text: 'Sign in' }),
+    authBlock,
   ]);
 
-  return el('header', { className: 'site-header' }, [
-    el('div', { className: 'brand-group' }, [
-      el('a', { href: APP_CONFIG.routeMap.home, className: 'brand-mark', text: APP_CONFIG.appName }),
-      el('p', { className: 'brand-copy', text: 'Book today. Print instantly. Rebook smartly.' }),
+  const brandLogo = el('div', { id: 'brandLottie', className: 'brand-logo', attrs: { 'aria-hidden': 'true' } });
+  const brandCard = el('div', { className: 'brand-card' }, [
+    brandLogo,
+    el('div', { className: 'brand-text' }, [
+      el('a', { href: APP_CONFIG.routeMap.home, className: 'brand-title', text: APP_CONFIG.appName }),
+      el('div', { className: 'brand-tagline', text: 'Book today. Print instantly. Rebook smartly.' }),
     ]),
-    el('div', { className: 'nav-right' }, [pagesNav, actionsOval]),
   ]);
+
+  const header = el('header', { className: 'site-header' }, [
+    brandCard,
+    el('div', { className: 'nav-right' }, [pagesNav, actionsRow]),
+  ]);
+
+  window.requestAnimationFrame(() => mountBrandLottie(brandLogo));
+  return header;
 }
 
 export function createNotificationDrawer(notifications) {
