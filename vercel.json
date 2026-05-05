@@ -1,0 +1,105 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/html/index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/html/index.html"
+    },
+    {
+      "source": "/movie.html",
+      "destination": "/html/movie.html"
+    },
+    {
+      "source": "/list.html",
+      "destination": "/html/list.html"
+    },
+    {
+      "source": "/movdetails.html",
+      "destination": "/html/movdetails.html"
+    },
+    {
+      "source": "/movdetails2.html",
+      "destination": "/html/movdetails2.html"
+    },
+    {
+      "source": "/movdetails3.html",
+      "destination": "/html/movdetails3.html"
+    },
+    {
+      "source": "/movdetails4.html",
+      "destination": "/html/movdetails4.html"
+    },
+    {
+      "source": "/about.html",
+      "destination": "/html/about.html"
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/html/contact.html"
+    },
+    {
+      "source": "/bookinghist.html",
+      "destination": "/html/bookinghist.html"
+    },
+    {
+      "source": "/profile.html",
+      "destination": "/html/profile.html"
+    },
+    {
+      "source": "/seats.html",
+      "destination": "/html/seats.html"
+    },
+    {
+      "source": "/payment.html",
+      "destination": "/html/payment.html"
+    },
+    {
+      "source": "/booking.html",
+      "destination": "/html/booking.html"
+    },
+    {
+      "source": "/help.html",
+      "destination": "/html/help.html"
+    },
+    {
+      "source": "/faq.html",
+      "destination": "/html/faq.html"
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/html/admin.html"
+    },
+    {
+      "source": "/terms.html",
+      "destination": "/html/terms.html"
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/html/privacy.html"
+    },
+    {
+      "source": "/cancellation.html",
+      "destination": "/html/cancellation.html"
+    },
+    {
+      "source": "/summa.html",
+      "destination": "/html/summa.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/service-worker.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}
