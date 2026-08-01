@@ -295,25 +295,19 @@ function renderAuthPage() {
   });
 
   wrapper.append(
-    createSection(
-      'Access your account',
-      'Sign in to continue booking or create a new account in a few seconds.',
-      el('div', { className: 'auth-entry-layout' }, [
-        el('div', { className: 'auth-intro-panel card-surface nested-surface' }, [
-          el('span', { className: 'eyebrow', text: 'Welcome back' }),
-          el('h1', { className: 'auth-title', text: 'Sign in to plan your next movie night' }),
-          el('p', {
-            text: 'Browse current releases, save favorites, and keep your booking history in one place.',
-          }),
-          el('div', { className: 'auth-benefits' }, [
-            infoCard('Fast booking', 'Pick a showtime, select seats, and check out without losing your progress.'),
-            infoCard('Saved activity', 'Your wishlist, recent views, and booking history stay available on this browser.'),
-            infoCard('Helpful support', 'Need assistance? The Help and About sections stay one click away.'),
-          ]),
+    el('section', { className: 'auth-layout' }, [
+      el('div', { className: 'auth-intro' }, [
+        el('span', { className: 'eyebrow', text: 'Welcome back' }),
+        el('h1', { className: 'auth-title', text: 'Welcome to ShowBookie' }),
+        el('p', { className: 'auth-subtitle', text: 'Movies, seats, and tickets — in minutes.' }),
+        el('ul', { className: 'auth-chip-row' }, [
+          authChip('🎟️', 'Fast booking'),
+          authChip('⭐', 'Saved activity'),
+          authChip('💬', 'Support'),
         ]),
-        el('div', { className: 'card-surface auth-card' }, [tabs, forms]),
-      ])
-    ),
+      ]),
+      el('div', { className: 'auth-card' }, [tabs, forms]),
+    ])
   );
 
   root.replaceChildren(
@@ -344,6 +338,13 @@ function renderAuthPage() {
 
 function infoCard(title, description) {
   return el('article', { className: 'feature-card' }, [el('h3', { text: title }), el('p', { text: description })]);
+}
+
+function authChip(icon, label) {
+  return el('li', { className: 'auth-chip' }, [
+    el('span', { className: 'auth-chip-icon', text: icon, attrs: { 'aria-hidden': 'true' } }),
+    el('span', { text: label }),
+  ]);
 }
 
 function decorateFavoriteButtons(container) {
