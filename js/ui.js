@@ -45,13 +45,17 @@ function mountBrandLottie(container) {
         return;
       }
       container.replaceChildren();
-      lottie.loadAnimation({
+      const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+      const animation = lottie.loadAnimation({
         container,
         renderer: 'svg',
-        loop: true,
-        autoplay: true,
+        loop: !reducedMotion,
+        autoplay: !reducedMotion,
         path: '/Entertainment.json',
       });
+      if (reducedMotion) {
+        animation.addEventListener('DOMLoaded', () => animation.goToAndStop(0, true));
+      }
     })
     .catch((error) => {
       console.error('Unable to initialize brand animation.', error);
@@ -171,6 +175,22 @@ export function getInitials(name) {
     .map((part) => part[0])
     .join('')
     .toUpperCase();
+}
+
+export function createBrandLottie(className = 'brand-logo') {
+  const mark = el('div', { className, attrs: { 'aria-hidden': 'true' } });
+  window.requestAnimationFrame(() => mountBrandLottie(mark));
+  return mark;
+}
+
+export function icon(name) {
+  const paths = {
+    bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
+    moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>',
+  };
+  const svg = el('svg', { className: 'icon-svg', attrs: { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' } });
+  svg.innerHTML = paths[name] || '';
+  return svg;
 }
 
 export function setDocumentMeta({ title, description }) {
@@ -297,7 +317,7 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
       ariaLabel: t('nav.notifications'),
     },
     [
-      el('span', { text: t('nav.notifications') }),
+      icon('bell'),
       el('span', { className: 'notification-count', text: String(notifications.filter((item) => !item.read).length) }),
     ]
   );
@@ -310,7 +330,6 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
   const langButton = el('button', {
     className: 'lang-btn',
     type: 'button',
-    ariaLabel: 'Language selector',
     text: `${currentLocale.toUpperCase()} ▾`,
   });
   langButton.addEventListener('click', () => {
@@ -322,7 +341,7 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
     onLocaleChange?.(nextLocale);
   });
 
-  const themeButton = el('button', { className: 'header-action', type: 'button', text: 'Theme' });
+  const themeButton = el('button', { className: 'header-action utility-button', type: 'button' }, [icon('moon'), el('span', { text: 'Theme' })]);
   themeButton.addEventListener('click', () => onThemeToggle?.());
 
   const pagesNav = el(
@@ -356,13 +375,12 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
       })();
 
   const actionsRow = el('div', { className: 'nav-actions' }, [
-    langButton,
     themeButton,
     notificationsButton,
     authBlock,
   ]);
 
-  const brandLogo = el('div', { id: 'brandLottie', className: 'brand-logo', attrs: { 'aria-hidden': 'true' } });
+  const brandLogo = createBrandLottie();
   const brandCard = el('div', { className: 'brand-card' }, [
     brandLogo,
     el('div', { className: 'brand-text' }, [
@@ -376,7 +394,6 @@ export function createNavbar({ activePage, user, notifications = [], locale, onT
     el('div', { className: 'nav-right' }, [pagesNav, actionsRow]),
   ]);
 
-  window.requestAnimationFrame(() => mountBrandLottie(brandLogo));
   return header;
 }
 
@@ -471,14 +488,11 @@ export function createSection(title, subtitle, content, actions = []) {
 
 export function createMovieCard({ movie, isFavorite, showFavorite = true, ctaLabel = 'View details' }) {
   const card = el('article', { className: 'movie-card' }, [
-    el('img', {
-      className: 'movie-poster',
-      src: movie.image,
-      alt: `${movie.title} poster`,
-      attrs: { loading: 'lazy' },
-    }),
+    el('div', { className: 'movie-poster-wrap' }, [
+      el('img', { className: 'movie-poster', src: movie.image, alt: `${movie.title} poster`, attrs: { loading: 'lazy' } }),
+      el('span', { className: 'rating-badge', text: `${movie.rating}/10` }),
+    ]),
     el('div', { className: 'movie-card-body' }, [
-      el('div', { className: 'rating-badge', text: `${movie.rating}/10` }),
       el('h3', { text: movie.title }),
       el('p', { text: `${movie.language} · ${movie.genres.join(' / ')}` }),
       el('div', { className: 'movie-meta' }, [
@@ -561,5 +575,9 @@ export function createDetailList(items) {
 }
 
 export function createEmptyGridMessage(message) {
-  return el('div', { className: 'empty-grid-message', text: message });
+  const isBrowsePrompt = /recently viewed|wishlist/i.test(message);
+  return el('div', { className: 'empty-grid-message' }, [
+    el('span', { text: message.replace(/\.$/, '') }),
+    isBrowsePrompt ? el('a', { href: APP_CONFIG.routeMap.movies, className: 'inline-link', text: 'Browse movies →' }) : null,
+  ]);
 }

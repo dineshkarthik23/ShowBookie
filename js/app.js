@@ -8,7 +8,6 @@ import {
   getMovies,
   getNotificationCenter,
   getRecommendedMovies,
-  getRecentlyViewedMovies,
   getShowById,
   getWishlistMovies,
   initializeMockDb,
@@ -44,6 +43,7 @@ import {
 } from './state.js';
 import {
   closeModal,
+  createBrandLottie,
   createBookingSummary,
   createDetailList,
   createEmptyGridMessage,
@@ -211,12 +211,14 @@ function renderAuthPage() {
     text: 'Forgot password?',
   });
   const loginError = el('p', { className: 'form-error' });
+  const loginSwitchLink = el('a', { href: '#', className: 'auth-switch-link', text: 'New here? Create an account' });
   const loginForm = el('form', { className: 'auth-form' }, [
     createField('Email', loginEmail, 'login-email-error'),
     createField('Password', loginPassword, 'login-password-error'),
     el('div', { className: 'auth-form-meta' }, [forgotPassword]),
     loginError,
     el('button', { className: 'button button-primary', type: 'submit', text: 'Sign in' }),
+    loginSwitchLink,
   ]);
 
   const registerName = el('input', { id: 'register-name', type: 'text', attrs: { placeholder: 'Full name' } });
@@ -228,6 +230,7 @@ function renderAuthPage() {
     attrs: { placeholder: 'Confirm password' },
   });
   const registerError = el('p', { className: 'form-error' });
+  const registerSwitchLink = el('a', { href: '#', className: 'auth-switch-link', text: 'Already have an account? Sign in' });
   const registerForm = el('form', { className: 'auth-form hidden' }, [
     createField('Name', registerName, 'register-name-error'),
     createField('Email', registerEmail, 'register-email-error'),
@@ -235,6 +238,7 @@ function renderAuthPage() {
     createField('Confirm password', registerConfirmPassword, 'register-confirm-password-error'),
     registerError,
     el('button', { className: 'button button-primary', type: 'submit', text: 'Create account' }),
+    registerSwitchLink,
   ]);
 
   const loginTab = el('button', { className: 'tab-button active', type: 'button', text: 'Sign in' });
@@ -244,11 +248,21 @@ function renderAuthPage() {
     registerTab.classList.toggle('active', mode === 'register');
     loginForm.classList.toggle('hidden', mode !== 'login');
     registerForm.classList.toggle('hidden', mode !== 'register');
+    if (authGuidance) {
+      authEyebrow.textContent = mode === 'login' ? 'Member access' : 'Create account';
+      authGuidance.textContent = mode === 'login'
+        ? 'Sign in to manage your bookings and seats.'
+        : 'Save your seats, bookings, and preferences in one place.';
+    }
   };
   loginTab.addEventListener('click', () => activate('login'));
   registerTab.addEventListener('click', () => activate('register'));
+  loginSwitchLink.addEventListener('click', (event) => { event.preventDefault(); activate('register'); });
+  registerSwitchLink.addEventListener('click', (event) => { event.preventDefault(); activate('login'); });
   tabs.append(loginTab, registerTab);
   forms.append(loginForm, registerForm);
+  const authEyebrow = el('p', { className: 'auth-kicker', text: 'Member access' });
+  const authGuidance = el('p', { className: 'auth-guidance', text: 'Sign in to manage your bookings and seats.' });
 
   forgotPassword.addEventListener('click', (event) => {
     event.preventDefault();
@@ -297,16 +311,41 @@ function renderAuthPage() {
   wrapper.append(
     el('section', { className: 'auth-layout' }, [
       el('div', { className: 'auth-intro' }, [
-        el('span', { className: 'eyebrow', text: 'Welcome back' }),
-        el('h1', { className: 'auth-title', text: 'Welcome to ShowBookie' }),
+        el('p', { className: 'ticket-caption', text: 'Your seat is waiting.' }),
+        el('article', { className: 'admit-ticket', attrs: { 'aria-label': 'Decorative ShowBookie admission ticket' } }, [
+          el('div', { className: 'ticket-main' }, [
+            el('span', { className: 'ticket-eyebrow', text: 'Admit one' }),
+            el('strong', { className: 'ticket-title', text: 'ShowBookie' }),
+            el('div', { className: 'ticket-meta' }, [
+              el('span', { text: 'Seat 08' }),
+              el('span', { text: 'Row F' }),
+              el('span', { text: 'Screen 01' }),
+            ]),
+          ]),
+          el('div', { className: 'ticket-perforation', attrs: { 'aria-hidden': 'true' } }),
+          el('div', { className: 'ticket-stub' }, [
+            el('span', { className: 'stub-label', text: 'ShowBookie · Admission' }),
+            el('div', { className: 'ticket-barcode', attrs: { 'aria-hidden': 'true' } },
+              Array.from({ length: 28 }, (_, index) => el('i', { className: `barcode-bar bar-${index % 5}` }))
+            ),
+          ]),
+        ]),
+        el('span', { className: 'eyebrow', text: 'ShowBookie' }),
+        el('h1', { className: 'auth-title', text: 'Your seat is waiting.' }),
         el('p', { className: 'auth-subtitle', text: 'Movies, seats, and tickets — in minutes.' }),
         el('ul', { className: 'auth-chip-row' }, [
-          authChip('🎟️', 'Fast booking'),
-          authChip('⭐', 'Saved activity'),
-          authChip('💬', 'Support'),
         ]),
       ]),
-      el('div', { className: 'auth-card' }, [tabs, forms]),
+      el('div', { className: 'auth-card' }, [
+        el('a', { className: 'auth-wordmark', href: APP_CONFIG.routeMap.login }, [
+          createBrandLottie('auth-brand-logo'),
+          el('span', { text: 'ShowBookie' }),
+        ]),
+        authEyebrow,
+        authGuidance,
+        tabs,
+        forms,
+      ]),
     ])
   );
 
@@ -340,13 +379,6 @@ function infoCard(title, description) {
   return el('article', { className: 'feature-card' }, [el('h3', { text: title }), el('p', { text: description })]);
 }
 
-function authChip(icon, label) {
-  return el('li', { className: 'auth-chip' }, [
-    el('span', { className: 'auth-chip-icon', text: icon, attrs: { 'aria-hidden': 'true' } }),
-    el('span', { text: label }),
-  ]);
-}
-
 function decorateFavoriteButtons(container) {
   container.querySelectorAll('[data-action="favorite"]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -366,12 +398,11 @@ function renderHomePage() {
   const user = getCurrentUser();
   const recommended = getRecommendedMovies();
   const favorites = getWishlistMovies();
-  const recentlyViewed = getRecentlyViewedMovies();
   const spotlight = recommended[0];
 
   setDocumentMeta({
     title: 'Home | ShowBookie',
-    description: 'Discover recommended movies, revisit recently viewed titles, and resume your next booking.',
+    description: 'Discover recommended movies and keep your saved picks ready for the next booking.',
   });
 
   const favoriteIds = favoriteIdsForUser(user);
@@ -383,21 +414,6 @@ function renderHomePage() {
 
   const sections = [
     createSection('Recommended movies', 'Sorted using popularity and your recent genre affinity.', recommendedGrid),
-    createSection(
-      'Recently viewed',
-      recentlyViewed.length
-        ? 'Pick up where you left off.'
-        : 'Your recent views will appear here after you open movie details.',
-      recentlyViewed.length
-        ? el(
-            'div',
-            { className: 'movie-grid compact' },
-            recentlyViewed.map((movie) =>
-              createMovieCard({ movie, isFavorite: favoriteIds.has(movie.id), ctaLabel: 'Open again' })
-            )
-          )
-        : createEmptyGridMessage('No recently viewed movies yet.')
-    ),
     createSection(
       'Wishlist',
       favorites.length ? 'Saved movies stay here across sessions.' : 'Save movies you want to revisit later.',
@@ -1207,18 +1223,11 @@ function renderProfilePage() {
 
   const nameInput = el('input', { type: 'text', value: user.name });
   const phoneInput = el('input', { type: 'text', value: user.phone || '' });
-  const localeSelect = el(
-    'select',
-    {},
-    APP_CONFIG.supportedLocales.map((code) => el('option', { text: code.toUpperCase(), attrs: { value: code } }))
-  );
-  localeSelect.value = user.locale || getLocalePreference();
 
   const formState = el('p', { className: 'field-help', text: 'Save profile preferences to update future sessions.' });
   const form = el('form', { className: 'card-surface nested-surface' }, [
     paymentField('Full name', nameInput, ''),
     paymentField('Phone', phoneInput, ''),
-    paymentField('Preferred locale', localeSelect, ''),
     formState,
     el('button', { className: 'button button-primary', type: 'submit', text: 'Save profile' }),
   ]);
@@ -1230,8 +1239,7 @@ function renderProfilePage() {
       formState.className = 'field-error';
       return;
     }
-    updateProfile({ name: nameInput.value, phone: phoneInput.value, locale: localeSelect.value });
-    await loadLocale(localeSelect.value);
+    updateProfile({ name: nameInput.value, phone: phoneInput.value });
     formState.textContent = 'Profile updated successfully.';
     formState.className = 'field-help';
     showToast({ title: 'Profile saved', message: 'Your preferences were updated.', type: 'success' });

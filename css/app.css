@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
 
 :root {
   color-scheme: light;
@@ -1282,4 +1282,344 @@ html[data-theme='dark'] .auth-tabs {
     box-shadow: none;
     border: none;
   }
+}
+
+/* ShowBookie cinema system */
+:root, html[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #121014;
+  --bg-elevated: #1b1720;
+  --surface: #1b1720;
+  --surface-strong: #211c26;
+  --text: #f2ede4;
+  --muted: #a8a0ac;
+  --line: #2a2530;
+  --primary: #e8b94c;
+  --primary-strong: #e8b94c;
+  --secondary: #7a2e3b;
+  --accent: #e8b94c;
+  --success: #70c091;
+  --danger: #e58b8b;
+  --warning: #e8b94c;
+  --shadow: none;
+  --radius: 8px;
+  --radius-sm: 6px;
+}
+
+html, body { background: #121014; }
+body { font-family: 'Inter', sans-serif; color: var(--text); background: #121014; }
+h1, h2, h3, .brand-title, .auth-title, .movie-card h3 { font-family: 'Oswald', sans-serif; letter-spacing: .02em; text-transform: uppercase; }
+h1, h2, h3, p { margin-top: 0; }
+.page-shell { background: #121014; }
+.site-header { width: min(calc(100% - 3rem), 1240px); padding: 1.35rem 0 1rem; border-bottom: 1px solid var(--line); }
+.brand-card { padding: 0; border: 0; background: transparent; box-shadow: none; border-radius: 0; }
+.brand-logo { display: block; width: 32px; height: 32px; flex: 0 0 32px; overflow: hidden; }
+.brand-title { font-size: 1.55rem; color: var(--text); }
+.brand-tagline { display: none; }
+.nav-right { gap: 1rem; }
+.nav-pages { gap: .25rem; }
+.nav-link { padding: .45rem .7rem; border-radius: 5px; font-size: .82rem; font-weight: 600; color: var(--muted); }
+.nav-link:hover, .nav-link.active { background: transparent; color: var(--primary); transform: none; }
+.nav-actions { gap: .85rem; }
+.header-action, .profile-pill { min-height: 32px; padding: 0 .2rem; border: 0; background: transparent; color: var(--muted); border-radius: 4px; font-size: .76rem; }
+.header-action:hover, .profile-pill:hover { background: transparent; color: var(--text); transform: none; }
+.utility-button { gap: .35rem; }
+.icon-svg { width: 18px; height: 18px; flex: 0 0 18px; }
+.notification-count { min-width: 16px; min-height: 16px; padding: 0 .25rem; background: var(--secondary); font-size: .65rem; }
+.profile-avatar { width: 28px; height: 28px; background: var(--secondary); font-size: .7rem; }
+.button { min-height: 40px; padding: 0 1rem; border-radius: 5px; border-color: var(--line); font-size: .82rem; }
+.button-primary, .btn-signin { background: var(--primary); color: #121014; border-color: var(--primary); box-shadow: none; }
+.button-secondary, .button-ghost { background: transparent; color: var(--text); }
+.button-secondary:hover, .button-ghost:hover, .button-ghost.active { background: var(--secondary); border-color: var(--secondary); color: var(--text); }
+.button-primary:hover, .btn-signin:hover { background: #f1ca6b; color: #121014; box-shadow: none; transform: translateY(-1px); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.page-main, .hero-section, .site-footer, .notification-drawer { width: min(calc(100% - 3rem), 1240px); }
+.page-main { padding-top: 2rem; gap: 2rem; }
+.hero-section, .card-surface, .movie-card, .booking-card, .state-card, .site-footer, .notification-drawer { border: 1px solid var(--line); background: var(--surface); box-shadow: none; border-radius: var(--radius); }
+.hero-section { margin-top: 2rem; padding: clamp(1.5rem, 4vw, 3rem); }
+.hero-copy h1 { font-size: clamp(2.3rem, 5vw, 4.8rem); }
+.eyebrow, .chip { padding: .35rem .6rem; border-radius: 4px; background: transparent; border: 1px solid var(--line); color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
+.hero-visual { border-radius: 5px; min-height: 280px; }
+.hero-section .button-primary { background: var(--secondary); border-color: var(--secondary); color: var(--text); }
+.content-section { padding: 1.4rem; }
+.section-heading h2 { font-size: 1.65rem; }
+.movie-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; }
+.movie-card { border-radius: 6px; background: var(--surface); }
+.movie-poster-wrap { position: relative; overflow: hidden; }
+.movie-poster { width: 100%; height: 100%; aspect-ratio: 2 / 3; max-height: 320px; object-fit: cover; }
+.movie-poster-wrap { aspect-ratio: 2 / 3; max-height: 320px; background: #151218; }
+.rating-badge { position: absolute; top: .65rem; right: .65rem; padding: .3rem .45rem; border-radius: 3px; background: var(--primary); color: #121014; font-size: .7rem; }
+.movie-card-body { gap: .55rem; padding: .9rem; }
+.movie-card h3 { font-size: 1.1rem; }
+.movie-card p, .movie-meta { font-size: .75rem; color: var(--muted); }
+.movie-card .button-primary { background: var(--secondary); color: var(--text); border-color: var(--secondary); }
+.movie-card-actions { display: flex; gap: .5rem; }
+.movie-card-actions .button-primary { flex: 1; }
+.movie-card-actions .button-ghost { padding-inline: .65rem; font-size: .7rem; }
+input, select, textarea { min-height: 40px; padding: .65rem .75rem; border-radius: 5px; background: #151218; color: var(--text); border-color: var(--line); }
+input::placeholder { color: #77707d; }
+.filters-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .75rem; padding: 1rem; }
+.filters-grid .field-group:last-child { grid-column: span 1; }
+.field-group { gap: .35rem; }
+.field-group span:first-child { color: var(--muted); font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.empty-grid-message { display: flex; align-items: center; gap: .8rem; padding: 1rem 0; color: var(--muted); font-size: .85rem; }
+.inline-link { color: var(--primary); font-weight: 600; }
+.booking-card { position: relative; overflow: hidden; padding: 1.25rem; border-style: dashed; }
+.booking-card::before, .booking-card::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #121014; top: 50%; transform: translateY(-50%); }
+.booking-card::before { left: -10px; } .booking-card::after { right: -10px; }
+.status-pill { padding: .28rem .5rem; border: 1px solid var(--line); border-radius: 3px; font-size: .68rem; text-transform: uppercase; }
+.status-pill.confirmed { color: var(--success); border-color: var(--success); background: transparent; }
+.status-pill.cancelled { color: var(--danger); border-color: var(--danger); background: transparent; }
+.auth-main { min-height: calc(100vh - 4rem); display: grid; place-items: center; padding: 2rem 0; }
+body[data-page='login'] .site-header, body[data-page='login'] .site-footer { display: none; }
+.auth-layout { display: flex; justify-content: center; width: 100%; }
+.auth-card { width: min(100%, 390px); padding: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: none; }
+.auth-card::before { height: 2px; background: var(--primary); }
+.auth-wordmark { font-family: 'Oswald', sans-serif; font-size: 1.4rem; text-transform: uppercase; }
+.auth-kicker { margin: .2rem 0 .8rem; color: var(--muted); font-size: .8rem; }
+.auth-guidance { margin: .1rem 0 1.1rem; color: var(--muted); font-size: .82rem; line-height: 1.45; max-width: 34ch; }
+.auth-tabs { margin-bottom: 1rem; background: transparent; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; }
+.tab-button { border-radius: 0; min-height: 2.5rem; font-size: .78rem; }
+.tab-button.active { background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); box-shadow: none; }
+.auth-form { gap: .85rem; }
+.auth-form .button-primary { min-height: 2.8rem; }
+.site-footer { margin-bottom: 1rem; padding: 1.25rem; box-shadow: none; }
+
+@media (max-width: 800px) { .filters-grid { grid-template-columns: repeat(3, 1fr); } .filters-grid .field-group:last-child { grid-column: span 3; } }
+@media (max-width: 600px) { .site-header, .page-main, .hero-section, .site-footer, .notification-drawer { width: min(calc(100% - 2rem), 1240px); } .site-header { gap: .8rem; } .nav-pages { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; width: 100%; } .nav-actions { justify-content: flex-start; } .hero-section { margin-top: 1rem; grid-template-columns: 1fr; } .hero-visual { min-height: 200px; } .filters-grid { grid-template-columns: 1fr 1fr; } .filters-grid .field-group:last-child { grid-column: span 2; } .movie-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .movie-card-actions { flex-direction: column; } }
+@media (max-width: 375px) { .movie-grid { gap: .65rem; } .movie-card-body { padding: .7rem; } .movie-card h3 { font-size: .95rem; } .filters-grid { grid-template-columns: 1fr; } .filters-grid .field-group:last-child { grid-column: span 1; } }
+
+/* Auth split layout */
+body[data-page='login'] { overflow-x: hidden; }
+body[data-page='login'] .page-main.auth-main { width: 100%; max-width: none; min-height: 100vh; padding: 0; display: block; }
+body[data-page='login'] .auth-shell { min-height: 100vh; }
+body[data-page='login'] .auth-layout { width: 100%; min-height: 100vh; display: grid; grid-template-columns: 55% 45%; align-items: stretch; }
+body[data-page='login'] .auth-intro { position: relative; min-height: 100vh; display: flex; align-items: flex-end; padding: clamp(2rem, 5vw, 5rem); overflow: hidden; background: #1b1720; }
+body[data-page='login'] .auth-intro::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .12; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); mix-blend-mode: screen; }
+body[data-page='login'] .auth-intro > * { position: relative; z-index: 1; }
+body[data-page='login'] .auth-intro .eyebrow, body[data-page='login'] .auth-intro .auth-subtitle, body[data-page='login'] .auth-intro .auth-chip-row { display: none; }
+body[data-page='login'] .auth-intro .auth-title { max-width: 100%; margin: 0; color: var(--text); font-size: clamp(2.8rem, 5vw, 5.4rem); line-height: .95; white-space: nowrap; text-transform: none; }
+body[data-page='login'] .auth-card { position: relative; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: clamp(2rem, 7vw, 7rem); border: 0; border-left: 1px dashed #403642; border-radius: 0; background: #1b1720; box-shadow: none; overflow: visible; }
+body[data-page='login'] .auth-card::before { content: ''; position: absolute; top: 50%; left: -13px; width: 24px; height: 24px; transform: translateY(-50%); border-radius: 50%; background: #121014; border: 1px solid #403642; }
+body[data-page='login'] .auth-card::after { content: ''; position: absolute; top: 0; bottom: 0; left: -1px; border-left: 1px dashed rgba(232,185,76,.32); pointer-events: none; }
+body[data-page='login'] .auth-wordmark { margin-bottom: 1.5rem; font-size: 1.6rem; }
+body[data-page='login'] .auth-kicker { margin-bottom: .4rem; color: var(--primary); font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+body[data-page='login'] .auth-guidance { margin-bottom: 2rem; max-width: 32ch; font-size: .86rem; line-height: 1.5; }
+body[data-page='login'] .auth-tabs { display: flex; gap: 1.5rem; margin-bottom: 1.8rem; border-bottom: 1px solid var(--line); }
+body[data-page='login'] .auth-tabs .tab-button { width: auto; min-height: 2.7rem; padding: 0 0 .65rem; border: 0; border-bottom: 2px solid transparent; color: var(--muted); background: transparent; border-radius: 0; box-shadow: none; }
+body[data-page='login'] .auth-tabs .tab-button.active { color: var(--primary); border-bottom-color: var(--primary); }
+body[data-page='login'] .auth-form { gap: 1rem; }
+body[data-page='login'] .field-group span:first-child { letter-spacing: .08em; }
+body[data-page='login'] input { background: #17131b; border-color: #342e38; }
+body[data-page='login'] input:focus-visible { border-color: var(--primary); box-shadow: inset 0 0 0 1px rgba(232,185,76,.28), 0 0 0 3px rgba(232,185,76,.12); }
+body[data-page='login'] .auth-form .button-primary { width: 100%; min-height: 3rem; margin-top: .3rem; background: var(--primary); color: #121014; }
+body[data-page='login'] .auth-switch-link { display: block; margin-top: .2rem; color: var(--muted); font-size: .78rem; text-align: center; }
+body[data-page='login'] .auth-switch-link:hover { color: var(--primary); }
+
+@media (max-width: 700px) {
+  body[data-page='login'] .auth-layout { display: flex; flex-direction: column; min-height: 100vh; }
+  body[data-page='login'] .auth-intro { min-height: 120px; height: 120px; flex: 0 0 120px; padding: 1.25rem 1.25rem 1.1rem; align-items: flex-end; }
+  body[data-page='login'] .auth-intro .auth-title { font-size: 2rem; white-space: nowrap; }
+  body[data-page='login'] .auth-card { min-height: calc(100vh - 120px); padding: 2rem 1.25rem 2.5rem; border-left: 0; border-top: 1px dashed #403642; }
+  body[data-page='login'] .auth-card::before { top: -13px; left: 50%; transform: translateX(-50%); }
+  body[data-page='login'] .auth-card::after { top: -1px; left: 0; right: 0; bottom: auto; border-left: 0; border-top: 1px dashed rgba(232,185,76,.32); }
+}
+
+/* Brand-only auth art: abstract marquee bokeh, no stock photography */
+body[data-page='login'] .auth-intro {
+  background: #121014;
+  isolation: isolate;
+}
+body[data-page='login'] .auth-intro::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 17% 22%, rgba(232,185,76,.44) 0 2.5%, transparent 9%),
+    radial-gradient(circle at 42% 12%, rgba(232,185,76,.2) 0 3%, transparent 12%),
+    radial-gradient(circle at 72% 30%, rgba(232,185,76,.3) 0 2%, transparent 10%),
+    radial-gradient(circle at 87% 67%, rgba(232,185,76,.22) 0 4%, transparent 13%),
+    radial-gradient(circle at 38% 78%, rgba(232,185,76,.16) 0 3%, transparent 12%),
+    linear-gradient(135deg, #121014 0%, #1b1720 58%, #121014 100%);
+  filter: blur(18px);
+  transform: scale(1.08);
+}
+body[data-page='login'] .auth-intro::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  mix-blend-mode: screen;
+}
+body[data-page='login'] .auth-intro > *:not(.auth-title) { display: none; }
+body[data-page='login'] .auth-card::before { display: none; }
+body[data-page='login'] .auth-card { border-left: 1px solid #2a2530; }
+body[data-page='login'] .auth-card::after { border-left: 1px solid #2a2530; }
+
+/* The supplied theatre artwork is framed so the headline lands inside its screen. */
+body[data-page='login'] .auth-intro {
+  align-items: initial;
+  padding: 0;
+  background-image: none;
+}
+body[data-page='login'] .auth-intro::before { display: none; }
+body[data-page='login'] .auth-intro .auth-title {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  width: 72%;
+  transform: translateX(-50%);
+  color: #f2ede4;
+  font-size: clamp(2rem, 3.7vw, 4.3rem);
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 2px 20px rgba(18,16,20,.85);
+}
+@media (max-width: 700px) {
+  body[data-page='login'] .auth-intro {
+    padding: 0;
+    background-position: center 24%;
+  }
+  body[data-page='login'] .auth-intro .auth-title {
+    top: 31%;
+    width: 86%;
+    font-size: 1.7rem;
+  }
+}
+
+/* CSS admission ticket: the auth page's signature element. */
+body[data-page='login'] .auth-intro {
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: #1b1720;
+}
+body[data-page='login'] .auth-intro::before,
+body[data-page='login'] .auth-intro::after { display: none; }
+body[data-page='login'] .auth-intro > * { display: none; }
+body[data-page='login'] .auth-intro > .admit-ticket,
+body[data-page='login'] .auth-intro > .ticket-caption { display: flex; }
+.admit-ticket {
+  position: relative;
+  width: min(82%, 590px);
+  height: min(78vh, 760px);
+  flex-direction: column;
+  overflow: visible;
+  transform: rotate(-4deg);
+  color: #f2ede4;
+  background: #121014;
+  border: 1px solid #2a2530;
+}
+.admit-ticket::before,
+.admit-ticket::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: 70%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #1b1720;
+  transform: translateY(-50%);
+}
+.admit-ticket::before { left: -14px; }
+.admit-ticket::after { right: -14px; }
+.ticket-main {
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+.ticket-eyebrow,
+.stub-label {
+  color: #a8a0ac;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.ticket-title {
+  font-family: 'Oswald', sans-serif;
+  color: #f2ede4;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 600;
+  letter-spacing: .025em;
+  line-height: .9;
+}
+.ticket-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.2rem;
+  color: rgba(232,185,76,.75);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.ticket-perforation {
+  position: absolute;
+  top: 70%;
+  left: 0;
+  width: 100%;
+  border-top: 2px dashed rgba(232,185,76,.4);
+}
+.ticket-stub {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.3rem clamp(1.5rem, 4vw, 3.5rem) 2rem;
+}
+.ticket-barcode {
+  height: 54%;
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+}
+.barcode-bar { display: block; flex: 1 0 2px; background: #f2ede4; }
+.barcode-bar.bar-1 { flex-basis: 4px; opacity: .7; }
+.barcode-bar.bar-2 { flex-basis: 7px; opacity: .9; }
+.barcode-bar.bar-3 { flex-basis: 3px; opacity: .6; }
+.barcode-bar.bar-4 { flex-basis: 5px; opacity: .8; }
+.ticket-caption {
+  position: absolute;
+  bottom: max(1.5rem, 4vh);
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  transform: translateX(-50%);
+  color: #f2ede4;
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+body[data-page='login'] .auth-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  color: #f2ede4;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.55rem;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+.auth-brand-logo { width: 32px; height: 32px; flex: 0 0 32px; overflow: hidden; }
+
+@media (max-width: 700px) {
+  body[data-page='login'] .auth-intro { display: grid; min-height: 120px; height: 120px; padding: .6rem; }
+  .admit-ticket { width: min(72%, 280px); height: 88px; }
+  .ticket-main { padding: .65rem .9rem; }
+  .ticket-title { font-size: 1.6rem; }
+  .ticket-eyebrow, .stub-label, .ticket-meta { font-size: .42rem; }
+  .ticket-stub { padding: .45rem .9rem .55rem; }
+  .ticket-barcode { gap: 1px; }
+  .admit-ticket::before, .admit-ticket::after { width: 14px; height: 14px; }
+  .admit-ticket::before { left: -8px; } .admit-ticket::after { right: -8px; }
+  .ticket-caption { display: none !important; }
 }
