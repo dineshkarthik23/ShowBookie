@@ -1,4 +1,4 @@
-const CACHE_NAME = 'showbookie-static-v2';
+const CACHE_NAME = 'showbookie-static-v4';
 const ASSETS = [
   '/',
   '/html/index.html',
@@ -29,7 +29,8 @@ const ASSETS = [
   '/js/ui.js',
   '/js/validation.js',
   '/locales/en.json',
-  '/locales/ta.json',
+  // Fix L-1: /locales/ta.json removed — file does not exist; cache.addAll() fails
+  // if any URL in the list returns a non-OK response, breaking the entire SW install.
   '/Entertainment.json',
   '/manifest.webmanifest',
   '/offline.html'
