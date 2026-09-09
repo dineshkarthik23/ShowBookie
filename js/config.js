@@ -4,7 +4,6 @@ export const APP_CONFIG = {
   locale: 'en-IN',
   storageKeys: {
     db: 'showbookie.db',
-    sessionUserId: 'showbookie.sessionUserId',
     bookingDraft: 'showbookie.bookingDraft',
     theme: 'showbookie.theme',
     locale: 'showbookie.locale',
@@ -347,24 +346,6 @@ export const SEED_DATA = {
       reservedSeats: ['A9', 'E1', 'E2', 'I8'],
     },
   ],
-  users: [
-    {
-      id: 'user_admin',
-      name: 'Local Admin',
-      email: 'local-admin@showbookie.local',
-      password: 'LocalAdmin@123',
-      role: 'admin',
-      phone: '+91 90000 12345',
-      locale: 'en',
-      createdAt: new Date().toISOString(),
-      lastLoginAt: '',
-      favorites: ['mov_dune2', 'mov_interstellar'],
-      recentlyViewed: ['mov_dune2'],
-      notifications: [],
-      preferences: {
-        theme: 'light',
-      },
-    },
-  ],
+  users: [],
   bookings: [],
 };

@@ -29,20 +29,7 @@ export function setLocalePreference(locale) {
   localStorage.setItem(APP_CONFIG.storageKeys.locale, locale);
 }
 
-export function getCurrentUserId() {
-  return localStorage.getItem(APP_CONFIG.storageKeys.sessionUserId) || '';
-}
-
-export function setCurrentUserId(userId) {
-  if (!userId) {
-    localStorage.removeItem(APP_CONFIG.storageKeys.sessionUserId);
-    return;
-  }
-  localStorage.setItem(APP_CONFIG.storageKeys.sessionUserId, userId);
-}
-
 export function clearSessionState() {
-  localStorage.removeItem(APP_CONFIG.storageKeys.sessionUserId);
   localStorage.removeItem(APP_CONFIG.storageKeys.bookingDraft);
 }
 

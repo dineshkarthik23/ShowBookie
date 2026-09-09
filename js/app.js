@@ -2,6 +2,7 @@ import { APP_CONFIG } from './config.js';
 import {
   cancelBooking,
   createBooking,
+  getBookingById,
   getBookingHistory,
   getCurrentUser,
   getMovieDetails,
@@ -11,6 +12,7 @@ import {
   getShowById,
   getWishlistMovies,
   initializeMockDb,
+  hydrateCurrentUser,
   loginUser,
   logoutUser,
   markMovieViewed,
@@ -29,8 +31,7 @@ import {
 import { calculateBookingPricing, canCancelBooking } from './booking.js';
 import { getActiveLocale, loadLocale, t } from './i18n.js';
 import { simulatePayment } from './payments-mock.js';
-import {
-  clearBookingDraft,
+import {  clearBookingDraft,
   clearSessionState,
   getBookingDraft,
   getLocalePreference,
@@ -273,9 +274,9 @@ function renderAuthPage() {
     });
   });
 
-  loginForm.addEventListener('submit', (event) => {
+  loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const result = loginUser({ email: loginEmail.value, password: loginPassword.value });
+    const result = await loginUser({ email: loginEmail.value, password: loginPassword.value });
     loginError.textContent = result.errors?.form || '';
     document.getElementById('login-email-error').textContent = result.errors?.email || '';
     document.getElementById('login-password-error').textContent = result.errors?.password || '';
@@ -285,9 +286,9 @@ function renderAuthPage() {
     }
   });
 
-  registerForm.addEventListener('submit', (event) => {
+  registerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const result = registerUser({
+    const result = await registerUser({
       name: registerName.value,
       email: registerEmail.value,
       password: registerPassword.value,
@@ -324,7 +325,7 @@ function renderAuthPage() {
           ]),
           el('div', { className: 'ticket-perforation', attrs: { 'aria-hidden': 'true' } }),
           el('div', { className: 'ticket-stub' }, [
-            el('span', { className: 'stub-label', text: 'ShowBookie · Admission' }),
+            el('span', { className: 'stub-label', text: 'ShowBookie Â· Admission' }),
             el('div', { className: 'ticket-barcode', attrs: { 'aria-hidden': 'true' } },
               Array.from({ length: 28 }, (_, index) => el('i', { className: `barcode-bar bar-${index % 5}` }))
             ),
@@ -332,7 +333,7 @@ function renderAuthPage() {
         ]),
         el('span', { className: 'eyebrow', text: 'ShowBookie' }),
         el('h1', { className: 'auth-title', text: 'Your seat is waiting.' }),
-        el('p', { className: 'auth-subtitle', text: 'Movies, seats, and tickets — in minutes.' }),
+        el('p', { className: 'auth-subtitle', text: 'Movies, seats, and tickets â€” in minutes.' }),
         el('ul', { className: 'auth-chip-row' }, [
         ]),
       ]),
@@ -612,7 +613,7 @@ function renderDetailsPage() {
     el('article', { className: 'show-card' }, [
       el('div', { className: 'show-card-copy' }, [
         el('h3', { text: show.theater.name }),
-        el('p', { text: `${show.screenName} · ${show.format} · ${formatDateTime(show.startTime)}` }),
+        el('p', { text: `${show.screenName} Â· ${show.format} Â· ${formatDateTime(show.startTime)}` }),
         el('small', { text: `${show.occupancy.occupancyRate}% occupied` }),
       ]),
       el('a', { href: `${APP_CONFIG.routeMap.seats}?showId=${show.id}`, className: 'button button-primary', text: 'Select seats' }),
@@ -686,7 +687,7 @@ function buildSeatGrid(show, selectedSeats, onSeatToggle) {
     show.seatMap.sections.map((section) =>
       el('section', { className: 'seat-section' }, [
         el('div', { className: 'section-heading' }, [
-          el('h3', { text: `${section.label} · ${formatCurrency(section.price)}` }),
+          el('h3', { text: `${section.label} Â· ${formatCurrency(section.price)}` }),
           el('p', { text: `${section.rows.length * section.seatsPerRow} seats` }),
         ]),
         el(
@@ -755,7 +756,7 @@ function renderSeatsPage() {
 
     const section = createSection(
       'Seat selection',
-      `${show.theater.name} · ${formatDateTime(show.startTime)} · ${show.screenName}`,
+      `${show.theater.name} Â· ${formatDateTime(show.startTime)} Â· ${show.screenName}`,
       el('div', { className: 'seat-layout-grid' }, [
         el('div', {}, [createSeatLegend(), buildSeatGrid(show, selectedSeats, onSeatToggle)]),
         el('aside', { className: 'sticky-column' }, [
@@ -977,12 +978,12 @@ function renderCheckoutPage() {
 
     const content = createSection(
       'Checkout',
-      `${show.movie.title} · ${show.theater.name} · ${formatDateTime(show.startTime)}`,
+      `${show.movie.title} Â· ${show.theater.name} Â· ${formatDateTime(show.startTime)}`,
       el('div', { className: 'checkout-grid' }, [
         el('div', { className: 'card-surface nested-surface' }, [
           el('h3', { text: 'Order details' }),
           el('p', { text: `Seats: ${draft.selectedSeats.join(', ')}` }),
-          el('p', { text: `Screen: ${show.screenName} · ${show.format}` }),
+          el('p', { text: `Screen: ${show.screenName} Â· ${show.format}` }),
         ]),
         form,
         createBookingSummary(pricing),
@@ -1015,12 +1016,15 @@ function paymentField(label, input, error) {
   ]);
 }
 
+// Fix C-3: removed the old findBookingById which fell back to getBookingHistory()[0]
+// on any miss. getBookingById() from api.js does an ownership-checked lookup and
+// returns null if the booking doesn't exist or belongs to a different user.
 function findBookingById(bookingId) {
-  return getBookingHistory().find((booking) => booking.id === bookingId) || getBookingHistory()[0] || null;
+  return getBookingById(bookingId);
 }
 
 function buildTicketDownloadHtml(booking) {
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>${booking.movie.title} Ticket</title><style>body{font-family:Arial,sans-serif;padding:32px;color:#111} .ticket{border:2px solid #111;padding:24px;max-width:680px;margin:auto} .row{display:flex;justify-content:space-between;margin:8px 0} pre{background:#f4f4f4;padding:12px;display:inline-block}</style></head><body><div class="ticket"><h1>${booking.movie.title}</h1><p>${booking.theater.name} · ${formatDateTime(booking.showStartTime)}</p><div class="row"><strong>Seats</strong><span>${booking.selectedSeats.join(', ')}</span></div><div class="row"><strong>Booking code</strong><span>${booking.bookingCode}</span></div><div class="row"><strong>Total</strong><span>${formatCurrency(booking.total)}</span></div><pre>${booking.bookingCode.match(/.{1,6}/g).join('\n')}</pre></div></body></html>`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>${booking.movie.title} Ticket</title><style>body{font-family:Arial,sans-serif;padding:32px;color:#111} .ticket{border:2px solid #111;padding:24px;max-width:680px;margin:auto} .row{display:flex;justify-content:space-between;margin:8px 0} pre{background:#f4f4f4;padding:12px;display:inline-block}</style></head><body><div class="ticket"><h1>${booking.movie.title}</h1><p>${booking.theater.name} Â· ${formatDateTime(booking.showStartTime)}</p><div class="row"><strong>Seats</strong><span>${booking.selectedSeats.join(', ')}</span></div><div class="row"><strong>Booking code</strong><span>${booking.bookingCode}</span></div><div class="row"><strong>Total</strong><span>${formatCurrency(booking.total)}</span></div><pre>${booking.bookingCode.match(/.{1,6}/g).join('\n')}</pre></div></body></html>`;
 }
 
 function renderConfirmationPage() {
@@ -1042,7 +1046,7 @@ function renderConfirmationPage() {
     el('div', { className: 'ticket-layout' }, [
       el('div', { className: 'card-surface nested-surface ticket-surface', attrs: { id: 'ticket-print-area' } }, [
         el('h3', { text: booking.movie.title }),
-        el('p', { text: `${booking.theater.name} · ${booking.screenName || booking.seatMap.name}` }),
+        el('p', { text: `${booking.theater.name} Â· ${booking.screenName || booking.seatMap.name}` }),
         el('p', { text: formatDateTime(booking.showStartTime) }),
         el('p', { text: `Seats: ${booking.selectedSeats.join(', ')}` }),
         el('p', { text: `Transaction: ${booking.transactionId}` }),
@@ -1126,7 +1130,7 @@ function renderHistoryPage() {
             el('div', { className: 'booking-card-header' }, [
               el('div', {}, [
                 el('h3', { text: booking.movie.title }),
-                el('p', { text: `${booking.theater.name} · ${formatDateTime(booking.showStartTime)}` }),
+                el('p', { text: `${booking.theater.name} Â· ${formatDateTime(booking.showStartTime)}` }),
               ]),
               el('span', { className: `status-pill ${booking.status}`, text: booking.status }),
             ]),
@@ -1357,7 +1361,7 @@ function renderHelpPage(page) {
     const nameInput = el('input', { type: 'text', attrs: { placeholder: 'Your name' } });
     const emailInput = el('input', { type: 'email', attrs: { placeholder: 'you@example.com' } });
     const messageInput = el('textarea', { attrs: { rows: '5', placeholder: 'Tell us about the issue' } });
-    const formState = el('p', { className: 'field-help', text: `Support: ${APP_CONFIG.supportEmail} · ${APP_CONFIG.supportPhone}` });
+    const formState = el('p', { className: 'field-help', text: `Support: ${APP_CONFIG.supportEmail} Â· ${APP_CONFIG.supportPhone}` });
     const form = el('form', { className: 'card-surface nested-surface' }, [
       paymentField('Name', nameInput, ''),
       paymentField('Email', emailInput, ''),
@@ -1542,7 +1546,7 @@ function renderAdminPage() {
     snapshot.movies.map((movie) =>
       el('article', { className: 'booking-card card-surface' }, [
         el('div', { className: 'booking-card-header' }, [
-          el('div', {}, [el('h3', { text: movie.title }), el('p', { text: `${movie.language} · ${movie.genres.join(', ')}` })]),
+          el('div', {}, [el('h3', { text: movie.title }), el('p', { text: `${movie.language} Â· ${movie.genres.join(', ')}` })]),
           el('button', { className: 'button button-secondary', type: 'button', text: 'Delete', dataset: { action: 'delete-movie', movieId: movie.id } }),
         ]),
       ])
@@ -1562,7 +1566,7 @@ function renderAdminPage() {
     snapshot.shows.map((show) =>
       el('article', { className: 'booking-card card-surface' }, [
         el('div', { className: 'booking-card-header' }, [
-          el('div', {}, [el('h3', { text: show.movie.title }), el('p', { text: `${show.theater.name} · ${formatDateTime(show.startTime)}` })]),
+          el('div', {}, [el('h3', { text: show.movie.title }), el('p', { text: `${show.theater.name} Â· ${formatDateTime(show.startTime)}` })]),
           el('button', { className: 'button button-secondary', type: 'button', text: 'Delete', dataset: { action: 'delete-show', showId: show.id } }),
         ]),
       ])
@@ -1644,6 +1648,7 @@ async function renderApp() {
 
 async function bootstrap() {
   initializeMockDb();
+  await hydrateCurrentUser();
   await loadLocale(getLocalePreference());
   applyThemeToDocument();
   if ('serviceWorker' in navigator) {

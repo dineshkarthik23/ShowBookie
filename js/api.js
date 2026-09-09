@@ -8,8 +8,7 @@ import {
 } from './booking.js';
 import {
   clearSessionState,
-  getCurrentUserId,
-  setCurrentUserId,
+  setBookingDraft,
 } from './state.js';
 import {
   normalizeEmail,
@@ -31,6 +30,13 @@ function readDb() {
   try {
     return JSON.parse(raw);
   } catch (error) {
+    // Fix: warn visibly and clear the corrupted key so the next getDb() call
+    // seeds fresh data rather than silently failing on every read.
+    console.warn(
+      '[ShowBookie] localStorage DB is corrupted and could not be parsed — resetting to seed data.',
+      error
+    );
+    localStorage.removeItem(APP_CONFIG.storageKeys.db);
     return null;
   }
 }
@@ -44,19 +50,9 @@ function ensureDbShape(data) {
   db.bookings = Array.isArray(db.bookings) ? db.bookings : [];
   db.supportRequests = Array.isArray(db.supportRequests) ? db.supportRequests : [];
   db.notifications = Array.isArray(db.notifications) ? db.notifications : [];
-  db.users = Array.isArray(db.users) ? db.users : [];
-  db.users = db.users
-    .filter((user) => normalizeEmail(user.email) !== 'demo@showbookie.com')
-    .map((user) =>
-      user.role === 'admin'
-        ? {
-            ...user,
-            name: user.name || 'Local Admin',
-            email: 'local-admin@showbookie.local',
-            password: user.password || 'LocalAdmin@123',
-          }
-        : user
-    );
+  // Authentication is owned by the server session; never retain user records
+  // or passwords in the browser's mock data store.
+  db.users = [];
   return db;
 }
 
@@ -99,7 +95,19 @@ function enrichShow(db, show) {
 }
 
 function enrichBooking(db, booking) {
-  const show = enrichShow(db, db.shows.find((item) => item.id === booking.showId));
+  const foundShow = db.shows.find((item) => item.id === booking.showId);
+  // Fix M-2/H-6: guard against a booking whose show was deleted by an admin.
+  // Return a safe placeholder rather than crashing enrichShow(db, undefined).
+  if (!foundShow) {
+    return {
+      ...clone(booking),
+      movie: { title: '[Deleted show]', heroImage: '', slug: '' },
+      theater: { name: '' },
+      showStartTime: '',
+      seatMap: null,
+    };
+  }
+  const show = enrichShow(db, foundShow);
   return {
     ...clone(booking),
     movie: show.movie,
@@ -123,12 +131,28 @@ function pushNotification(db, userId, payload) {
   });
 }
 
-function ensureAuthenticatedUser(db) {
-  const userId = getCurrentUserId();
-  if (!userId) {
-    return null;
+let authenticatedUser = null;
+
+function ensureAuthenticatedUser(_db) {
+  return authenticatedUser;
+}
+
+async function requestAuth(path, values, options = {}) {
+  try {
+    const response = await fetch(path, {
+      method: options.method || 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // Keep the express-session cookie on every auth request, including when
+      // the static frontend is served through a local/proxy origin.
+      credentials: 'include',
+      cache: 'no-store',
+      body: values ? JSON.stringify(values) : undefined,
+    });
+    const result = await response.json().catch(() => ({ ok: false, errors: { form: 'Unexpected server response.' } }));
+    return response.ok ? result : { ok: false, errors: result.errors || { form: 'Authentication request failed.' } };
+  } catch (_error) {
+    return { ok: false, errors: { form: 'Unable to reach the ShowBookie server.' } };
   }
-  return db.users.find((user) => user.id === userId) || null;
 }
 
 function sortMovies(movies, sortBy) {
@@ -155,8 +179,17 @@ export function initializeMockDb() {
 }
 
 export function getCurrentUser() {
-  const db = getDb();
-  return ensureAuthenticatedUser(db);
+  return authenticatedUser;
+}
+
+export async function hydrateCurrentUser() {
+  try {
+    const result = await requestAuth('/api/me', null, { method: 'GET' });
+    authenticatedUser = result.ok ? result.user : null;
+  } catch (_error) {
+    authenticatedUser = null;
+  }
+  return authenticatedUser;
 }
 
 export function requireCurrentUser() {
@@ -167,69 +200,38 @@ export function requireCurrentUser() {
   return user;
 }
 
-export function registerUser(values) {
+export async function registerUser(values) {
   const errors = validateRegistration(values);
   if (Object.keys(errors).length > 0) {
     return { ok: false, errors };
   }
-
-  const db = getDb();
-  const email = normalizeEmail(values.email);
-  const existing = db.users.find((user) => normalizeEmail(user.email) === email);
-  if (existing) {
-    return { ok: false, errors: { email: 'An account with this email already exists.' } };
-  }
-
-  const user = {
-    id: nextId('user', db.users),
+  const result = await requestAuth('/api/register', {
     name: sanitizeText(values.name),
-    email,
-    password: String(values.password),
-    role: 'user',
-    phone: '',
-    locale: APP_CONFIG.defaultLocale,
-    createdAt: new Date().toISOString(),
-    lastLoginAt: new Date().toISOString(),
-    favorites: [],
-    recentlyViewed: [],
-    notifications: [],
-    preferences: {
-      theme: APP_CONFIG.defaultTheme,
-    },
-  };
-
-  db.users.push(user);
-  pushNotification(db, user.id, {
-    type: 'success',
-    title: 'Welcome to ShowBookie',
-    message: 'Your account is ready. Browse movies and start booking.',
+    email: normalizeEmail(values.email),
+    password: values.password,
+    confirmPassword: values.confirmPassword,
   });
-  saveDb(db);
-  setCurrentUserId(user.id);
-
-  return { ok: true, user };
+  if (result.ok) authenticatedUser = result.user;
+  return result;
 }
 
-export function loginUser(values) {
+export async function loginUser(values) {
   const errors = validateLogin(values);
   if (Object.keys(errors).length > 0) {
     return { ok: false, errors };
   }
 
-  const db = getDb();
-  const email = normalizeEmail(values.email);
-  const user = db.users.find((item) => normalizeEmail(item.email) === email);
-  if (!user || user.password !== String(values.password)) {
-    return { ok: false, errors: { form: 'Invalid email or password.' } };
-  }
-
-  user.lastLoginAt = new Date().toISOString();
-  saveDb(db);
-  setCurrentUserId(user.id);
-  return { ok: true, user };
+  const result = await requestAuth('/api/login', {
+    email: normalizeEmail(values.email),
+    password: values.password,
+  });
+  if (result.ok) authenticatedUser = result.user;
+  return result;
 }
 
-export function logoutUser() {
+export async function logoutUser() {
+  await requestAuth('/api/logout', null);
+  authenticatedUser = null;
   clearSessionState();
 }
 
@@ -369,9 +371,12 @@ export function getShowById(showId) {
 }
 
 export function saveBookingDraft(draft) {
-  return {
-    ...draft,
-  };
+  // Fix: was a no-op (returned a spread clone but never wrote to localStorage).
+  // Now persists via setBookingDraft() so the draft survives page reloads
+  // between booking steps.
+  const saved = clone(draft);
+  setBookingDraft(saved);
+  return saved;
 }
 
 export function createBooking({ showId, selectedSeats, promoCode, paymentMethod, transactionId }) {
@@ -464,6 +469,25 @@ export function getBookingHistory(filters = {}) {
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+// Fix C-3: strict ownership-checked booking lookup.
+// The old findBookingById() in app.js fell back to getBookingHistory()[0] when
+// the bookingId wasn't found — causing accidental data exposure and hiding
+// "not found" errors. This function returns null on any miss.
+export function getBookingById(bookingId) {
+  if (!bookingId) {
+    return null;
+  }
+  const db = getDb();
+  const user = ensureAuthenticatedUser(db);
+  if (!user) {
+    return null;
+  }
+  const booking = db.bookings.find(
+    (item) => item.id === bookingId && item.userId === user.id
+  );
+  return booking ? enrichBooking(db, booking) : null;
 }
 
 export function cancelBooking(bookingId) {
@@ -632,6 +656,17 @@ export function deleteMovie(movieId) {
   if (!user || user.role !== 'admin') {
     throw new Error('Admin access required.');
   }
+  // Fix H-6: collect show IDs being removed so we can mark affected bookings.
+  // Without this, enrichBooking crashes when Booking History renders for any
+  // user who had a booking for the deleted movie's shows.
+  const deletedShowIds = new Set(
+    db.shows.filter((show) => show.movieId === movieId).map((show) => show.id)
+  );
+  db.bookings = db.bookings.map((booking) =>
+    deletedShowIds.has(booking.showId)
+      ? { ...booking, status: 'show_deleted' }
+      : booking
+  );
   db.movies = db.movies.filter((movie) => movie.id !== movieId);
   db.shows = db.shows.filter((show) => show.movieId !== movieId);
   saveDb(db);

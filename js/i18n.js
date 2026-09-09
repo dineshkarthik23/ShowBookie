@@ -6,8 +6,19 @@ let translations = {};
 
 export async function loadLocale(locale = getLocalePreference()) {
   const safeLocale = APP_CONFIG.supportedLocales.includes(locale) ? locale : APP_CONFIG.defaultLocale;
-  const response = await fetch(`/locales/${safeLocale}.json`);
-  translations = await response.json();
+  // Fix H-7: fetch failures (offline, missing file) must not crash bootstrap.
+  // Fall back to empty translations so the app renders with key names rather
+  // than showing a blank page or an unhandled rejection.
+  try {
+    const response = await fetch(`/locales/${safeLocale}.json`);
+    if (!response.ok) {
+      throw new Error(`Locale fetch failed: ${response.status}`);
+    }
+    translations = await response.json();
+  } catch (error) {
+    console.warn('[ShowBookie] Could not load locale file, falling back to key names.', error);
+    translations = {};
+  }
   activeLocale = safeLocale;
   setLocalePreference(safeLocale);
   return translations;
