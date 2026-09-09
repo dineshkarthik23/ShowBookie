@@ -39,10 +39,13 @@ CREATE TABLE shows (
 
 CREATE TABLE user (
     UserID INT PRIMARY KEY,
-    Name VARCHAR(255),
-    Email VARCHAR(255),
+    Name VARCHAR(255) NOT NULL,
+    -- Fix M-7: UNIQUE constraint prevents duplicate accounts at the DB level.
+    -- Application-level dedup alone is insufficient under concurrent inserts.
+    -- Fix M-8: NOT NULL prevents NULL passwords slipping through.
+    Email VARCHAR(255) NOT NULL UNIQUE,
     PhoneNumber VARCHAR(20),
-    Password VARCHAR(255)
+    Password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE booking (
@@ -51,7 +54,8 @@ CREATE TABLE booking (
     ShowID INT,
     BookingDate DATETIME,
     TotalSeats INT,
-    TotalPrice DECIMAL(10,2),
+    -- Fix M-8: TotalPrice must never be NULL — used in revenue calculations.
+    TotalPrice DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (UserID) REFERENCES user(UserID),
     FOREIGN KEY (ShowID) REFERENCES shows(ShowID)
 );
@@ -62,7 +66,8 @@ CREATE TABLE payment (
     PaymentDate DATETIME,
     PaymentMode VARCHAR(255),
     PaymentStatus VARCHAR(255),
-    AmountPaid DECIMAL(10,2),
+    -- Fix M-8: AmountPaid must not be NULL — zero is explicit for failed/pending.
+    AmountPaid DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (BookingID) REFERENCES booking(BookingID)
 );
 
@@ -71,12 +76,23 @@ CREATE TABLE seat (
     SeatNumber VARCHAR(255),
     BookingID INT,
     ScreenID INT,
-    Status VARCHAR(255),
+    -- Fix M-9: Status is a controlled enum — free text allows silent corruption.
+    Status VARCHAR(255) NOT NULL DEFAULT 'Available'
+        CHECK (Status IN ('Available', 'Booked', 'Reserved')),
     FOREIGN KEY (BookingID) REFERENCES booking(BookingID),
     FOREIGN KEY (ScreenID) REFERENCES screen(ScreenID)
 );
 
 desc seat;
+
+-- Fix L-6: MySQL creates indexes on referenced PK columns but NOT on the FK
+-- (child) side. Without these, queries like "SELECT * FROM booking WHERE UserID = ?"
+-- do full table scans.
+CREATE INDEX idx_booking_user   ON booking(UserID);
+CREATE INDEX idx_booking_show   ON booking(ShowID);
+CREATE INDEX idx_seat_booking   ON seat(BookingID);
+CREATE INDEX idx_seat_screen    ON seat(ScreenID);
+CREATE INDEX idx_payment_booking ON payment(BookingID);
 
 INSERT INTO theater (TheaterID, Name, Location, TotalSeats)
 VALUES
